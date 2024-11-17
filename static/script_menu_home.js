@@ -42,7 +42,7 @@ document.addEventListener('click', async function(event) {
 
         const textp = document.querySelector('.task-item')
         const textpText = textp.querySelector('label p').innerText;
-        showNotification(textpText);
+        //showNotification(textpText);
 
         console.log(event.target.id, event.target.innerText);
         await updateMenuHome(event.target.id, event.target.innerText);
@@ -60,7 +60,7 @@ document.addEventListener('click', async function(event) {
 
         const textp = document.querySelector('.task-item')
         const textpText = textp.querySelector('label p').innerText;
-        showNotification(textpText);
+        //showNotification(textpText);
 
         await updateMenuHome(item_id, selectedValue);
     }
@@ -76,7 +76,7 @@ document.addEventListener('click', async function(event) {
 
         const textp = document.querySelector('.task-item')
         const textpText = textp.querySelector('label p').innerText;
-        showNotification(textpText);
+        //showNotification(textpText);
 
         console.log(event.target.id, event.target.innerText);
         await updateMenuHome(event.target.id, event.target.innerText);

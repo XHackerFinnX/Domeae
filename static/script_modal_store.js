@@ -56,7 +56,7 @@ async function addTaskToday(event) {
         reminderTime = 0;
     }
 
-    showNotificationToday(taskText, assignee);
+    //showNotificationToday(taskText, assignee);
 
     toggleModal(event);
 
@@ -92,7 +92,7 @@ async function addTaskWeek(event) {
         reminderTime = 0;
     }
 
-    showNotificationWeek(taskText, assignee);
+    //showNotificationWeek(taskText, assignee);
 
     toggleModal(event);
 
@@ -128,7 +128,7 @@ async function addTaskMonth(event) {
         reminderTime = 0;
     }
 
-    showNotificationMonth(taskText, assignee);
+    //showNotificationMonth(taskText, assignee);
 
     toggleModal(event);
 

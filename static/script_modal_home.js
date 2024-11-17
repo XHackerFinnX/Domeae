@@ -56,7 +56,7 @@ async function addTaskUrgent(event) {
         reminderTime = 0;
     }
 
-    showNotificationUrgent(taskText, assignee);
+    //showNotificationUrgent(taskText, assignee);
 
     toggleModal(event);
     
@@ -92,7 +92,7 @@ async function addTaskNormal(event) {
         reminderTime = 0;
     }
 
-    showNotificationNormal(taskText, assignee);
+    //showNotificationNormal(taskText, assignee);
 
     toggleModal(event);
 
@@ -129,7 +129,7 @@ async function addTaskRegular(event) {
         reminderTime = 0;
     }
 
-    showNotificationRegular(taskText, assignee);
+    //showNotificationRegular(taskText, assignee);
 
     toggleModal(event);
 
