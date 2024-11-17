@@ -1,7 +1,2 @@
-venv
-
 __pycache__
-
-.env
-
-user_account.json
+venv
