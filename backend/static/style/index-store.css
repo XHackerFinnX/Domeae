@@ -1,0 +1,543 @@
+body {
+    display: flex;
+    background-color: #1E1E1E;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    caret-color: transparent;
+}
+
+.sidebar {
+    width: 390px;
+    margin-right: 5px;
+}
+.sidebar .menu {
+    margin-bottom: 20px;
+}
+.sidebar .menu div {
+    padding: 9px;
+    margin: 0 0;
+    background-color: #333333;
+    border-radius: 10px;
+}
+.main-content {
+    flex: 1;
+    margin-left: 2px;
+    padding: 5px;
+    background-color: #1E1E1E;
+    flex-direction: column; /* Устанавливаем вертикальное расположение */
+    margin-bottom: 20px; /* Отступ снизу для разделения */
+}
+.main-content h1 {
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+.task-section {
+    display: flex;
+    justify-content: space-between;
+}
+.task-column {
+    width: 40%;
+    background-color: #1E1E1E;
+    padding: 5px;
+    border-radius: 10px;
+    margin-right: 10px;
+    flex: 1;
+}
+.task-column h2 {
+    font-size: 18px;
+    margin-top: 0;
+}
+.task-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    background-color: #444444;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 10px;
+    position: relative;
+    justify-content: space-between;
+    word-wrap: break-word; /* Перенос длинных слов */
+    word-break: break-word; /* Для устаревших браузеров */
+    white-space: normal; /* Разрешает переносы строк */
+}
+
+.task-item label p {
+    margin: 0; /* Убирает лишние отступы */
+    word-wrap: break-word; /* Перенос длинных слов */
+    word-break: break-word; /* Аналогично */
+    white-space: normal; /* Перенос строк */
+}
+
+.task-item span {
+    display: block;
+    color: #aaaaaa;
+    font-size: 14px;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"] + label {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+}
+
+input[type="checkbox"] + label p {
+    margin: 0;
+    line-height: 1.2;
+}
+
+input[type="checkbox"] + label span {
+    display: block;
+    margin-top: 2px;
+    line-height: 1.2;
+}
+
+input[type="checkbox"] + label:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid #333;
+    border-radius: 50%;
+    background-color: #333;
+}
+
+input[type="checkbox"]:checked + label:before {
+    background-color: #4A90E2;
+    border-color: #4A90E2;
+}
+
+input[type="checkbox"]:checked + label:after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    opacity: 1;
+}
+
+.menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.widget {
+    height: 80px;
+    flex-direction: column;
+    align-items: start;
+    background-color: #333333;
+    border-radius: 10px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: transform 0.1s ease; /* Плавный переход для эффекта */
+}
+
+.widget:active {
+    transform: scale(0.95); /* Уменьшение размера при нажатии */
+}
+
+.icon-count-container {
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-color: #9B9B9B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text {
+    margin-top: 8px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.count {
+    margin-left: auto;
+    font-weight: bold;
+    font-size: 25px;
+    color: #ffffff;
+}
+
+.divider {
+    width: 1px;
+    background-color: #444444;
+    margin: 0 5px;
+}
+
+.list span {
+    font-size: 18px;
+    color: #b8b8b8;
+}
+
+.list-spisok {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.home-button {
+    background-color: rgba(128, 128, 128, 0.5);
+    color: #dfdfdf;
+    border: 1px solid #808080;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    width: 390px;
+}
+
+.home-button:hover {
+    background-color: rgba(128, 128, 128, 0.7);
+}
+
+.store-button {
+    background-color: rgba(128, 128, 128, 0.5);
+    color: #dfdfdf;
+    border: 1px solid #808080;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    width: 390px;
+}
+
+.store-button:hover {
+    background-color: rgba(128, 128, 128, 0.7);
+}
+
+.universitet-button {
+    background-color: rgba(128, 128, 128, 0.5);
+    color: #dfdfdf;
+    border: 1px solid #808080;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    width: 390px;
+}
+
+.universitet-button:hover {
+    background-color: rgba(128, 128, 128, 0.7);
+}
+
+.icon-list {
+    width: 20px;
+    height: 20px;
+    margin: auto;
+    margin-right: 0px;
+    margin-top: 0px;
+    background-color: #444444;
+    background-image: url('/static/pictures/list-symbol.png');
+    background-size: cover;
+    flex-shrink: 0;
+    cursor: pointer;
+    position: relative;
+}
+
+.task-column-srochniedela {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task-column-obichniedela {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task-column-reguliariedela {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task-column-segodnia {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task-column-nanedele {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task-column-vmesetsa {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.iconhome {
+    width: 30px;
+    height: 30px;
+    background-color: #1E1E1E;
+    background-image: url('/static/pictures/home_plus.png');
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+}
+
+.iconstore {
+    width: 30px;
+    height: 30px;
+    background-color: #1E1E1E;
+    background-image: url('/static/pictures/ecommerce-bag-plus.png');
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.menu-toggle {
+    display: none;
+    background-color: #333;
+    color: #ffffff;
+    font-size: 18px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border: none;
+    border-radius: 11px;
+}
+
+@media (max-width: 539px) {
+
+    body {
+        flex-direction: column;
+    } 
+
+    .menu-toggle {
+        display: flex;
+        width: 40px;
+        padding: 3px;
+        padding-left: 9px;
+        padding-right: 4px;
+        height: 42px;
+        font-size: 24px;
+    }
+
+    .menu {
+        margin-top: 10px;
+    }
+
+    .sidebar {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 320px;
+        height: 100%;
+        background-color: #1E1E1E;
+        z-index: 10;
+    }
+
+    .sidebar.visible {
+        display: block;
+        transform: translateY(0);
+    }
+
+    .divider {
+        display: none;
+    }
+
+    .home-button,
+    .store-button,
+    .universitet-button {
+        width: 320px;
+    }
+
+    .main-content {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+@media (min-width: 540px) {
+    .menu-toggle {
+        display: none;
+    }
+
+    .sidebar {
+        display: block;
+    }
+}
+
+.close-menu {
+    display: none;
+    background-color: #333;
+    color: #ffffff;
+    font-size: 25px;
+    padding: 2px;
+    padding-left: 8px;
+    border: none;
+    cursor: pointer;
+    width: 30px;
+    text-align: left;
+    border-radius: 11px;
+}
+
+@media (max-width: 539px) {
+    .close-menu {
+        display: block;
+    }
+
+    .sidebar {
+        padding-top: 50px;
+    }
+
+    .task-section {
+        flex-direction: column;
+    }
+
+    .task-column {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+div.sidebar.visible {
+    padding: 10px;
+}
+
+@media (max-width: 470px) {
+
+    .assignee-wrapper button {
+        margin-left: auto;
+    }
+
+    .assignee-wrapper label {
+        margin-right: 7px;
+        width: 80px;
+    }
+    .assignee-wrapper {
+        display: flex;
+        align-items: center; /* выравнивание по вертикали */
+        gap: 10px; /* расстояние между элементами */
+    }
+}
+
+@media (max-width: 405px) {
+
+    .assignee-wrapper button {
+        margin-left: auto;
+    }
+
+    .assignee-wrapper label {
+        margin-right: 7px;
+        width: 80px;
+    }
+    .assignee-wrapper {
+        display: flex;
+        align-items: center; /* выравнивание по вертикали */
+        gap: 10px; /* расстояние между элементами */
+    }
+}
+
+@media (max-width: 380px) {
+
+    .assignee-wrapper button {
+        margin-left: auto;
+    }
+
+    .assignee-wrapper label {
+        margin-right: 7px;
+        width: 80px;
+    }
+    .assignee-wrapper {
+        display: flex;
+        align-items: center; /* выравнивание по вертикали */
+        gap: 10px; /* расстояние между элементами */
+    }
+}
+
+@media (max-width: 360px) {
+
+    .assignee-wrapper button {
+        margin-left: auto;
+    }
+
+    .assignee-wrapper label {
+        margin-right: 7px;
+        width: 80px;
+    }
+    .assignee-wrapper {
+        display: flex;
+        align-items: center; /* выравнивание по вертикали */
+        gap: 10px; /* расстояние между элементами */
+    }
+}
+
+@media (max-width: 330px) {
+
+    .assignee-wrapper button {
+        margin-left: auto;
+    }
+
+    .assignee-wrapper label {
+        margin-right: 7px;
+        width: 80px;
+    }
+    .assignee-wrapper {
+        display: flex;
+        align-items: center; /* выравнивание по вертикали */
+        gap: 10px; /* расстояние между элементами */
+    }
+}
+
+.close-f {
+    background-color: #1E1E1E;
+    color: #ffffff;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+}
+
+.today-f {
+    padding-left: 160px;
+}
+
+.priority-f {
+    padding-left: 140px;
+}
+
+.user-f {
+    padding-left: 140px;
+}
+
+@media (max-width: 480px) {
+    .today-f, .priority-f, .user-f {
+        font-size: 0.8em;
+        white-space: nowrap;
+        padding-left: 50px;
+    }
+}

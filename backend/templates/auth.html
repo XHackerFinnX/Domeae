@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="/static/style/auth-style.css">
+    <link rel="icon" href="/static/pictures/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container">
+          <h1 class="name">Welcome</h1>
+          <form class="form" id="authForm" action="/" method="POST">
+            <input type="text" id="user" placeholder="login" name="username" required>
+            <input type="password" id="password" placeholder="password" name="password" required>
+            <button type="submit" class="auth-button" id="login-button">Entry</button>
+          </form>
+        </div>
+    
+        <ul class="bg-bubbles">
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+    </div>
+
+    <div id="errorPopup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup">&times;</span>
+            <p>Ошибка авторизации. Проверьте имя пользователя или пароль.</p>
+        </div>
+    </div>
+    <script src="/static/script.js"></script>
+    <script src="/static/script_auth_post.js"></script>
+</body>
+</html>

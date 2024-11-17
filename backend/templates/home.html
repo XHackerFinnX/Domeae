@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дом</title>
+    <link rel="stylesheet" href="/static/style/index-style.css">
+    <link rel="stylesheet" href="/static/style/modal-urgent.css">
+    <link rel="stylesheet" href="/static/style/modal-normal.css">
+    <link rel="stylesheet" href="/static/style/modal-regular.css">
+    <link rel="stylesheet" href="/static/style/menu-task-home.css">
+    <link rel="stylesheet" href="/static/style/modal_reassign_user.css">
+    <link rel="icon" href="/static/pictures/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+    <!-- МЕНЮ -->
+
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <div class="sidebar">
+
+        <button class="close-menu" onclick="toggleSidebar()">×</button>
+
+        <div class="menu">
+            <div class="widget" onclick="sendGetRequest()">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #E94E77; background-image: url('/static/pictures/planning.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{data_count_plan}}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">В планах</div>
+            </div>
+            <div class="widget" onclick="sendPostToday('today')">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #4A90E2; background-image: url('/static/pictures/calendar.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{ data_count.count_completion_date }}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Сегодня</div>
+            </div>
+            <div class="widget">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #C2C2C2; background-image: url('/static/pictures/mail.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{ data_count.count_checkbox_false }}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Все</div>
+            </div>
+            <div class="widget" onclick="sendPostPriority('priority')">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #F5A623; background-image: url('/static/pictures/flag.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{ data_count.count_priority }}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">С флажком</div>
+            </div>
+            <div class="widget" onclick="sendPostCompleted('completed')">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #9B9B9B; background-image: url('/static/pictures/checkmark.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{ data_count.count_checkbox_true }}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Завершено</div>
+            </div>
+            <div class="widget" onclick="sendPostUser('user')">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #7ED321; background-image: url('/static/pictures/user.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{ data_count.count_user_name }}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Назначено</div>
+            </div>
+        </div>
+        <div class="list">
+            <label for="my-list">
+                <span>Мои списки</span>
+                {% if data_filter == 'today' %}
+                    <span class="today-f">Ф: Сегодня</span>
+                    <button class="close-f" onclick="sendPostDeleteFilter('today')">×</button>
+                {% endif %}
+                {% if data_filter == 'priority' %}
+                    <span class="priority-f">Ф: С флажком</span>
+                    <button class="close-f" onclick="sendPostDeleteFilter('priority')">×</button>
+                {% endif %}
+                {% if data_filter == 'user' %}
+                    <span class="user-f">Ф: Назначено</span>
+                    <button class="close-f" onclick="sendPostDeleteFilter('user')">×</button>
+                {% endif %}
+            </label>
+
+            <div class="list-spisok">
+                <button class="home-button" onclick="updateContent('Дом')">Дом</button>
+                <button class="store-button" onclick="updateContent('Покупки')">Покупки</button>
+                <button class="universitet-button" onclick="updateContent('Учеба')">Учеба</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- РАЗДЕЛИТЕЛЬ -->
+
+    <div class="divider"></div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+
+    <div class="main-content">
+        <h1>Дом</h1>
+        <div class="task-section" style="margin-top: 10px;">
+            <div class="task-column">
+
+                <!-- СРОЧНЫЕ ДЕЛА -->
+
+                <div class="task-column-srochniedela">
+                    <h2 style="margin-bottom: 0px;">Срочные дела</h2>
+                    <div class="iconhome" id="urgent1" style="background-color: #1E1E1E; background-image: url('/static/pictures/home_plus.png'); background-size: cover;"></div>
+                </div>
+
+                <div id="taskModalUrgent" class="modal">
+                    <div class="modal-content">
+                        <span class="close-button" id="urgent1" onclick="toggleModal(event)">&times;</span>
+                        <h2 style="font-size: 18px;">Добавить новую задачу</h2>
+                        <textarea id="task-text-urgent" rows="3"></textarea>
+                        
+                        <label for="task-text">Напомнить</label>
+                        
+                        <div class="reminder-wrapper">
+                            <label class="toggle-container-urgent" style="width: 50px;">
+                                <input type="checkbox" id="reminder-toggle-urgent" onclick="toggleReminderUrgent()">
+                                <span class="slider"></span>
+                            </label>
+                            
+                            <div id="reminder-time-container-urgent" style="display: none;">
+                                <label for="reminder-time-urgent">через</label>
+                                <input type="number" id="reminder-time-urgent" min="1" max="24">
+                                <label for="reminder-time-urgent">часов</label>
+                            </div>
+                        </div>
+                
+                        <div class="assignee-wrapper">
+                            <label for="assignee-urgent">Кому:</label>
+                            <select id="assignee-urgent">
+                                <option value="Лёше">Лёше</option>
+                                <option value="Снеже">Снеже</option>
+                                <option value="Суперсемейка">Суперсемейка</option>
+                            </select>
+            
+                            <button class="add-button" id="urgent1" onclick="addTaskUrgent(event)">✔</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ДЕЛО -->
+                {% for u in data_urgent %}
+                <div class="task-item">
+                    <input type="checkbox" id="{{u[0]}}-task-{{u[1]}}">
+                    <label for="{{u[0]}}-task-{{u[1]}}">
+                        {% for t_u in u[2]%}
+                        <p>{{t_u}}</p>
+                        {% endfor %}
+                        <span>Назначено: {{u[3]}}</span>
+                        <span>Срок завершения: {{u[4]}}</span>
+                    </label>
+                    <div data-id="{{u[0]}}-task-{{u[1]}}" class="task-container">
+                        <div class="icon-list" data-toggle="dropdown"></div>
+                        {% if u[5] == true %}
+                        <div class="icon" style="background-color: #F5A623; background-image: url('/static/pictures/flag.png'); background-size: cover; margin-right: 4.5px; margin-top: 40px; width: 18px; height: 18px;"></div>
+                        {% endif %}
+                        <div class="dropdown-menu" style="display: none; right: 37px; top: 10px;">
+                            <ul>
+                                <li class="menu-item" id="{{u[0]}}-{{u[1]}}-1">Переназначить пользователя</li>
+                                <li class="menu-item has-submenu">Срок завершения
+                                    <ul class="submenu" style="display: none;">
+                                        <li class="submenu-item" id="{{u[0]}}-{{u[1]}}-2-1">Нет</li>
+                                        <li class="submenu-item" id="{{u[0]}}-{{u[1]}}-2-2">Сегодня</li>
+                                        <li class="submenu-item" id="{{u[0]}}-{{u[1]}}-2-3">Завтра</li>
+                                        <li class="submenu-item" id="{{u[0]}}-{{u[1]}}-2-4">На выходных</li>
+                                        <li class="submenu-item" id="{{u[0]}}-{{u[1]}}-2-5">На следующих выходных</li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item has-submenu">Переместить дело
+                                    <ul class="submenu" style="display: none;">
+                                        <li class="submenu-item" id="{{u[0]}}-{{u[1]}}-3-1">Срочное дело</li>
+                                        <li class="submenu-item" id="{{u[0]}}-{{u[1]}}-3-2">Обычное дело</li>
+                                        <li class="submenu-item" id="{{u[0]}}-{{u[1]}}-3-3">Регулярное дело</li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item" id="{{u[0]}}-{{u[1]}}-4">Приоритет</li>
+                                <li class="menu-item" id="{{u[0]}}-{{u[1]}}-5">Без приоритета</li>
+                                <li class="menu-item" id="{{u[0]}}-{{u[1]}}-6">Удалить дело</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- ОБЫЧНЫЕ ДЕЛА -->
+
+            <div class="task-column">
+
+                <div class="task-column-obichniedela">
+                    <h2 style="margin-bottom: 0px;">Обычные дела</h2>
+                    <div class="iconhome" id="normal2" style="background-color: #1E1E1E; background-image: url('/static/pictures/home_plus.png'); background-size: cover;"></div>
+                </div>
+
+                <div id="taskModalNormal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-button" id="normal2" onclick="toggleModal(event)">&times;</span>
+                        <h2 style="font-size: 18px;">Добавить новую задачу</h2>
+                        <textarea id="task-text-normal" rows="3"></textarea>
+                        
+                        <label for="task-text">Напомнить</label>
+                        
+                        <div class="reminder-wrapper">
+                            <label class="toggle-container-normal" style="width: 50px;">
+                                <input type="checkbox" id="reminder-toggle-normal" onclick="toggleReminderNormal()">
+                                <span class="slider"></span>
+                            </label>
+                            
+                            <div id="reminder-time-container-normal" style="display: none;">
+                                <label for="reminder-time-normal">через</label>
+                                <input type="number" id="reminder-time-normal" min="1" max="24">
+                                <label for="reminder-time-normal">часов</label>
+                            </div>
+                        </div>
+                
+                        <div class="assignee-wrapper">
+                            <label for="assignee-normal">Кому:</label>
+                            <select id="assignee-normal">
+                                <option value="Лёше">Лёше</option>
+                                <option value="Снеже">Снеже</option>
+                                <option value="Суперсемейка">Суперсемейка</option>
+                            </select>
+            
+                            <button class="add-button" id="normal2" onclick="addTaskNormal(event)">✔</button>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- ДЕЛО -->
+
+                 {% for n in data_normal %}
+                 <div class="task-item">
+                     <input type="checkbox" id="{{n[0]}}-task-{{n[1]}}">
+                     <label for="{{n[0]}}-task-{{n[1]}}">
+                            {% for t_n in n[2]%}
+                            <p>{{t_n}}</p>
+                            {% endfor %}
+                            <span>Назначено: {{n[3]}}</span>
+                            <span>Срок завершения: {{n[4]}}</span>
+                     </label>
+                     <div data-id="{{n[0]}}-task-{{n[1]}}" class="task-container">
+                         <div class="icon-list" data-toggle="dropdown"></div>
+                         {% if n[5] == true %}
+                         <div class="icon" style="background-color: #F5A623; background-image: url('/static/pictures/flag.png'); background-size: cover; margin-right: 4.5px; margin-top: 40px; width: 18px; height: 18px;"></div>
+                         {% endif %}
+                         <div class="dropdown-menu" style="display: none; right: 37px; top: 10px;">
+                             <ul>
+                                 <li class="menu-item" id="{{n[0]}}-{{n[1]}}-1">Переназначить пользователя</li>
+                                 <li class="menu-item has-submenu">Срок завершения
+                                     <ul class="submenu" style="display: none;">
+                                         <li class="submenu-item" id="{{n[0]}}-{{n[1]}}-2-1">Нет</li>
+                                         <li class="submenu-item" id="{{n[0]}}-{{n[1]}}-2-2">Сегодня</li>
+                                         <li class="submenu-item" id="{{n[0]}}-{{n[1]}}-2-3">Завтра</li>
+                                         <li class="submenu-item" id="{{n[0]}}-{{n[1]}}-2-4">На выходных</li>
+                                         <li class="submenu-item" id="{{n[0]}}-{{n[1]}}-2-5">На следующих выходных</li>
+                                     </ul>
+                                 </li>
+                                 <li class="menu-item has-submenu">Переместить дело
+                                     <ul class="submenu" style="display: none;">
+                                         <li class="submenu-item" id="{{n[0]}}-{{n[1]}}-3-1">Срочное дело</li>
+                                         <li class="submenu-item" id="{{n[0]}}-{{n[1]}}-3-2">Обычное дело</li>
+                                         <li class="submenu-item" id="{{n[0]}}-{{n[1]}}-3-3">Регулярное дело</li>
+                                     </ul>
+                                 </li>
+                                 <li class="menu-item" id="{{n[0]}}-{{n[1]}}-4">Приоритет</li>
+                                 <li class="menu-item" id="{{n[0]}}-{{n[1]}}-5">Без приоритета</li>
+                                 <li class="menu-item" id="{{n[0]}}-{{n[1]}}-6">Удалить дело</li>
+                             </ul>
+                         </div>
+                     </div>
+                 </div>
+                 {% endfor %}
+
+            </div>
+
+            <!-- РЕГУЛЯРНЫЕ ДЕЛА -->
+
+            <div class="task-column">
+
+                <div class="task-column-reguliariedela">
+                    <h2 style="margin-bottom: 0px;">Регулярные дела</h2>
+                    <div class="iconhome" id="regular3" style="background-color: #1E1E1E; background-image: url('/static/pictures/home_plus.png'); background-size: cover;"></div>
+                </div>
+
+                <div id="taskModalRegular" class="modal">
+                    <div class="modal-content">
+                        <span class="close-button" id="regular3" onclick="toggleModal(event)">&times;</span>
+                        <h2 style="font-size: 18px;">Добавить новую задачу</h2>
+                        <textarea id="task-text-regular" rows="3"></textarea>
+                        
+                        <label for="task-text">Напомнить</label>
+                        
+                        <div class="reminder-wrapper">
+                            <label class="toggle-container-regular" style="width: 50px;">
+                                <input type="checkbox" id="reminder-toggle-regular" onclick="toggleReminderRegular()">
+                                <span class="slider"></span>
+                            </label>
+                            
+                            <div id="reminder-time-container-regular" style="display: none;">
+                                <label for="reminder-time-regular">через</label>
+                                <input type="number" id="reminder-time-regular" min="1" max="24">
+                                <label for="reminder-time-regular">часов</label>
+                            </div>
+                        </div>
+                
+                        <div class="assignee-wrapper">
+                            <label for="assignee-regular">Кому:</label>
+                            <select id="assignee-regular">
+                                <option value="Лёше">Лёше</option>
+                                <option value="Снеже">Снеже</option>
+                                <option value="Суперсемейка">Суперсемейка</option>
+                            </select>
+            
+                            <button class="add-button" id="regular3" onclick="addTaskRegular(event)">✔</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ДЕЛО -->
+
+                {% for r in data_regular %}
+                <div class="task-item">
+                    <input type="checkbox" id="{{r[0]}}-task-{{r[1]}}">
+                    <label for="{{r[0]}}-task-{{r[1]}}">
+                        {% for t_r in r[2]%}
+                        <p>{{t_r}}</p>
+                        {% endfor %}
+                        <span>Назначено: {{r[3]}}</span>
+                        <span>Срок завершения: {{r[4]}}</span>
+                    </label>
+                    <div data-id="{{r[0]}}-task-{{r[1]}}" class="task-container">
+                        <div class="icon-list" data-toggle="dropdown"></div>
+                        {% if r[5] == true %}
+                        <div class="icon" style="background-color: #F5A623; background-image: url('/static/pictures/flag.png'); background-size: cover; margin-right: 4.5px; margin-top: 40px; width: 18px; height: 18px;"></div>
+                        {% endif %}
+                        <div class="dropdown-menu" style="display: none; right: 37px; top: 10px;">
+                            <ul>
+                                <li class="menu-item" id="{{r[0]}}-{{r[1]}}-1">Переназначить пользователя</li>
+                                <li class="menu-item has-submenu">Срок завершения
+                                    <ul class="submenu" style="display: none;">
+                                        <li class="submenu-item" id="{{r[0]}}-{{r[1]}}-2-1">Нет</li>
+                                        <li class="submenu-item" id="{{r[0]}}-{{r[1]}}-2-2">Сегодня</li>
+                                        <li class="submenu-item" id="{{r[0]}}-{{r[1]}}-2-3">Завтра</li>
+                                        <li class="submenu-item" id="{{r[0]}}-{{r[1]}}-2-4">На выходных</li>
+                                        <li class="submenu-item" id="{{r[0]}}-{{r[1]}}-2-5">На следующих выходных</li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item has-submenu">Переместить дело
+                                    <ul class="submenu" style="display: none;">
+                                        <li class="submenu-item" id="{{r[0]}}-{{r[1]}}-3-1">Срочное дело</li>
+                                        <li class="submenu-item" id="{{r[0]}}-{{r[1]}}-3-2">Обычное дело</li>
+                                        <li class="submenu-item" id="{{r[0]}}-{{r[1]}}-3-3">Регулярное дело</li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item" id="{{r[0]}}-{{r[1]}}-4">Приоритет</li>
+                                <li class="menu-item" id="{{r[0]}}-{{r[1]}}-5">Без приоритета</li>
+                                <li class="menu-item" id="{{r[0]}}-{{r[1]}}-6">Удалить дело</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+        
+        <!-- Модальное окно изменить кому -->
+
+        <div class="ModalWrapper">
+            <div class="modal-assignee-wrapper">
+                <select id="modal-assignee">
+                    <option value="Лёше">Лёше</option>
+                    <option value="Снеже">Снеже</option>
+                    <option value="Суперсемейка">Суперсемейка</option>
+                </select>
+                <button class="modalassigneeButton">✔</button>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('visible');
+        }
+
+        async function updateContent(section) {
+            const contentData = {
+                title: section
+            };
+    
+            const response = await fetch("/update_content", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(contentData)
+            });
+            const result = await response.json();
+
+            if (response.ok){
+                window.location.href = result.data;
+            }
+            }
+    </script>
+
+    <script src="/static/script_modal_home.js"></script>
+    <script src="/static/script_menu_home.js"></script>
+    <script src="/static/script_checkbox_home.js"></script>
+    <script src="/static/script_notification.js"></script>
+    <script src="/static/script_plan.js"></script>
+    <script src="/static/script_filter.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    width: 200px;
+    font-size: 14px;
+    z-index: 100;
+}
+
+.dropdown-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 2px;
+}
+
+.dropdown-menu ul li {
+    padding: 8px;
+    cursor: pointer;
+    color: #b8b8b8;
+    border-bottom: 1px solid #444;
+    border-radius: 3px;
+}
+
+.dropdown-menu ul li:hover {
+    background-color: #444;
+}
+
+.dropdown-menu ul li ul {
+    display: none;
+    padding-left: 10px;
+}
+
+.dropdown-menu ul li:hover ul {
+    display: none;
+}
+
+.dropdown-menu ul li ul li {
+    padding: 5px;
+    color: #c0c0c0;
+    border-bottom: none;
+}
+
+.submenu {
+    display: none;
+    margin-top: 5px;
+    padding-left: 15px;
+}
+
+.submenu-item {
+    cursor: pointer;
+}
+
+.menu-item.has-submenu {
+    cursor: pointer;
+}
+
+.has-submenu {
+    cursor: pointer;
+}
+
+.submenu.visible {
+    display: block; /* Подменю видно, когда добавлен класс visible */
+}
+
+.submenu li {
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #dfdfdf;
+    background-color: #444;
+    border-radius: 2px;
+    transition: background-color 0.3s;
+}
+
+/* Эффект при наведении */
+.submenu li:hover {
+    background-color: #292929;
+    color: #ffffff;
+}

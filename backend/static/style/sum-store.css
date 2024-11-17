@@ -1,0 +1,66 @@
+.block-menu {
+    background-color: #f0f0f0;
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+    width: fit-content;
+    max-width: 170px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: fixed; /* Положение блока фиксированное */
+    top: 20px;
+    right: 15px; /* Положение для телефонов */
+}
+
+/* Стиль текста внутри меню */
+.block-menu p {
+    font-size: 17px;
+    font-weight: bold;
+    color: #333333;
+    margin: 0;
+}
+
+/* Адаптивные стили по ширине экрана */
+@media (max-width: 1592px) {
+    .block-menu { right: 3%; }
+}
+
+@media (max-width: 1421px) {
+    .block-menu { right: 3%; }
+}
+
+@media (max-width: 1327px) {
+    .block-menu { right: 3%; }
+}
+
+@media (max-width: 1194px) {
+    .block-menu { right: 3%; }
+}
+
+@media (max-width: 1090px) {
+    .block-menu { right: 3%; }
+}
+
+@media (max-width: 1007px) {
+    .block-menu { right: 3%; }
+}
+
+/* Для телефонов и небольших экранов */
+@media (max-width: 539px) {
+    .block-menu { right: 4%; }
+}
+
+@media (max-width: 383px) {
+    .block-menu { right: 4%; }
+}
+
+/* Стиль для скролл-блока */
+.scrollable {
+    max-height: 690px;
+    min-height: 110px;
+    overflow: auto;
+    scrollbar-width: none;
+}
+
+.scrollable::-webkit-scrollbar {
+    display: none;
+}

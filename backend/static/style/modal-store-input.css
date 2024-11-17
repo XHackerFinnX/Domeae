@@ -1,0 +1,67 @@
+.modalOverlayInput {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-input {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    background-color: #333333;
+    margin: 400px auto;
+    padding: 20px;
+    border: 3px solid #888;
+    width: 250px;
+    max-width: 240px;
+    border-radius: 8px;
+    gap: 20px;
+}
+
+.modaltextInput {
+    flex-grow: 1;
+    background-color: #6d6d6d;
+    color: #ddd;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    resize: none;
+    font-size: 21px;
+    text-align: center;
+    vertical-align: middle;
+    height: 25px;
+    caret-color: #ffffff;
+}
+
+.modaltextInput::placeholder {
+    color: #383838;
+}
+
+.modalconfirmButton {
+    background-color: #777;
+    color: #fff;
+    border: none;
+    width: 50px;
+    padding: 10px 15px;
+    border-radius: 21px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 18px;
+}
+
+.modalconfirmButton:hover {
+    background-color: #555;
+    font-size: 18px;
+}
+
+/* Центрирование окна при изменении размеров экрана */
+@media (max-width: 600px) {
+    .modal-input {
+        width: 90%; /* чтобы модальное окно было адаптивным на мобильных */
+    }
+}

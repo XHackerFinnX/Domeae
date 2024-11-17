@@ -1,0 +1,252 @@
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background-color: #333333;
+    margin: 200px auto;
+    padding: 20px;
+    border: 3px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 8px;
+}
+
+.modal-content label,
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
+    margin-bottom: 6px;
+    width: 100%;
+}
+
+.modal-content textarea {
+    resize: none;
+    max-width: 100%;
+    width: 100%;
+    height: 100px;
+    box-sizing: border-box;
+    font-size: 18px;
+    caret-color:#444444;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.reminder-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Расстояние между тумблером и контейнером времени */
+}
+
+.toggle-container-plan input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-container-plan {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    margin-left: 1px;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 24px;
+    width: 50px;
+}
+
+.slider::before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #74f753;
+}
+
+input:checked + .slider::before {
+    transform: translateX(26px);
+}
+
+#reminder-time-container-plan {
+    display: none;
+    margin-bottom: 15px;
+}
+
+#reminder-time-container-plan {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Отступы между элементами */
+    margin: 0;
+}
+
+#reminder-time-container-plan label,
+#reminder-time-container-plan input {
+    flex: 1; /* Делит контейнер на три колонки */
+}
+
+#reminder-time-plan {
+    width: 50px;
+    text-align: center;
+}
+
+.assignee-wrapper {
+    display: flex;
+    margin-top: 15px;
+    gap: 10px; /* Отступ между колонками */
+    align-items: start; /* Вертикальное выравнивание элементов */
+}
+
+.assignee-wrapper label {
+    text-align: left; /* Выравнивание текста метки вправо */
+    width: 60px;
+    font-size: 18px;
+    margin-top: 6px;
+}
+
+.assignee-wrapper select {
+    font-size: 18px;
+    width: 105px;
+    color: #dfdfdf; /* Цвет текста */
+    background-color: #333333; /* Фон селекта */
+    border: 1px solid #444444; /* Серый цвет рамки */
+    border-radius: 5px; /* Закругление углов */
+    appearance: none; /* Убирает стандартный стиль браузера */
+    -webkit-appearance: none; /* Для Safari */
+    -moz-appearance: none; /* Для Firefox */
+    cursor: pointer; /* Курсор указатель */
+    position: relative;
+    margin-top: 6px;
+}
+
+.assignee-wrapper select option {
+    color: #ffffff; /* Цвет текста в выпадающем списке */
+    background-color: #333333; /* Цвет фона для каждой опции */
+}
+
+.add-button-plan {
+    background-color: #616161; /* Цвет фона кнопки */
+    color: #ffffff; /* Цвет иконки галочки */
+    border: none;
+    border-radius: 50%; /* Закругленная форма */
+    height: 30px;
+    width: 30px;
+    font-size: 24px; /* Размер иконки галочки */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+    margin-left: auto;
+}
+
+.add-button-plan:hover {
+    background-color: #357ABD; /* Цвет фона при наведении */
+}
+
+/* МОДАЛЬНОЕ ОКНО С ВЫБОРОМ ПЕРЕМЕЩЕНИЯ */
+
+.modal-overlay-o {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 5;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-o {
+    background: #2c2c2c; /* Темно-серый фон */
+    padding: 5px;
+    border-radius: 12px; /* Скругленные углы */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7); /* Более мягкая тень */
+    width: 350px;
+    text-align: center;
+    color: #ffffff; /* Белый текст */
+}
+
+.modal h3 {
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+    color: #d3d3d3; /* Светло-серый текст */
+}
+
+.modal-btn {
+    display: block;
+    width: 90%; /* Одинаковый размер кнопок */
+    margin: 15px auto;
+    padding: 12px 0;
+    border: none;
+    background: #4a4a4a; /* Средне-серый фон */
+    color: #ffffff; /* Белый текст */
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.modal-btn:hover {
+    background: #5a5a5a; /* Чуть светлее при наведении */
+    transform: translateY(-2px); /* Легкий подъем */
+}
+
+.modal-back-o {
+    background: #2c2c2c;
+    font-size: 30px;
+    color: #b3b3b3;
+    margin-right: 260px;
+    cursor: pointer;
+}
+
+
+.modal-btn:active {
+    transform: translateY(1px); /* Легкое нажатие */
+    background: #5e5e5e;
+}

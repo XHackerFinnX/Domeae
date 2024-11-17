@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Покупки</title>
+    <link rel="stylesheet" href="/static/style/index-store.css">
+    <link rel="stylesheet" href="/static/style/modal-today.css">
+    <link rel="stylesheet" href="/static/style/modal-week.css">
+    <link rel="stylesheet" href="/static/style/modal-month.css">
+    <link rel="stylesheet" href="/static/style/menu-task-home.css">
+    <link rel="stylesheet" href="/static/style/sum-store.css">
+    <link rel="stylesheet" href="/static/style/modal-store-input.css">
+    <link rel="stylesheet" href="/static/style/modal_reassign_user.css">
+    <link rel="icon" href="/static/pictures/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+    <!-- МЕНЮ -->
+
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <div class="sidebar">
+
+        <button class="close-menu" onclick="toggleSidebar()">×</button>
+
+        <div class="menu">
+            <div class="widget" onclick="sendGetRequest()">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #E94E77; background-image: url('/static/pictures/planning.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{data_count_plan}}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">В планах</div>
+            </div>
+            <div class="widget" onclick="sendPostToday('today')">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #4A90E2; background-image: url('/static/pictures/calendar.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{ data_count.count_completion_date }}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Сегодня</div>
+            </div>
+            <div class="widget">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #C2C2C2; background-image: url('/static/pictures/mail.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{ data_count.count_checkbox_false }}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Все</div>
+            </div>
+            <div class="widget" onclick="sendPostPriority('priority')">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #F5A623; background-image: url('/static/pictures/flag.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{ data_count.count_priority }}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">С флажком</div>
+            </div>
+            <div class="widget" onclick="sendPostCompleted('completed')">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #9B9B9B; background-image: url('/static/pictures/checkmark.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{ data_count.count_checkbox_true }}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Завершено</div>
+            </div>
+            <div class="widget" onclick="sendPostUser('user')">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #7ED321; background-image: url('/static/pictures/user.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{ data_count.count_user_name }}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Назначено</div>
+            </div>
+        </div>
+        <div class="list">
+            <label for="my-list">
+                <span>Мои списки</span>
+                {% if data_filter == 'today' %}
+                    <span class="today-f">Ф: Сегодня</span>
+                    <button class="close-f" onclick="sendPostDeleteFilter('today')">×</button>
+                {% endif %}
+                {% if data_filter == 'priority' %}
+                    <span class="priority-f">Ф: С флажком</span>
+                    <button class="close-f" onclick="sendPostDeleteFilter('priority')">×</button>
+                {% endif %}
+                {% if data_filter == 'user' %}
+                    <span class="user-f">Ф: Назначено</span>
+                    <button class="close-f" onclick="sendPostDeleteFilter('user')">×</button>
+                {% endif %}
+            </label>
+
+            <div class="list-spisok">
+                <button class="home-button" onclick="updateContent('Дом')">Дом</button>
+                <button class="store-button" onclick="updateContent('Покупки')">Покупки</button>
+                <button class="universitet-button" onclick="updateContent('Учеба')">Учеба</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- РАЗДЕЛИТЕЛЬ -->
+
+    <div class="divider"></div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+
+    <div class="main-content">
+        <h1>Покупки</h1>
+
+        <div class="task-section" style="margin-top: 10px;">
+
+            <!-- СЕГОДНЯ -->
+
+            <div class="task-column">
+                <div class="task-column-segodnia">
+                    <h2 style="margin-bottom: 0px;">Сегодня</h2>
+                    <div class="iconstore" id="today1" style="background-color: #1E1E1E; background-image: url('/static/pictures/ecommerce-bag-plus.png'); background-size: cover;"></div>
+                </div>
+
+                <div id="taskModalToday" class="modal">
+                    <div class="modal-content">
+                        <span class="close-button" id="today1" onclick="toggleModal(event)">&times;</span>
+                        <h2 style="font-size: 18px;">Добавить новую задачу</h2>
+                        <textarea id="task-text-today" rows="3"></textarea>
+                        
+                        <label for="task-text">Напомнить</label>
+                        
+                        <div class="reminder-wrapper">
+                            <label class="toggle-container-today" style="width: 50px;">
+                                <input type="checkbox" id="reminder-toggle-today" onclick="toggleReminderToday()">
+                                <span class="slider"></span>
+                            </label>
+                            
+                            <div id="reminder-time-container-today" style="display: none;">
+                                <label for="reminder-time-today">через</label>
+                                <input type="number" id="reminder-time-today" min="1" max="24">
+                                <label for="reminder-time-today">часов</label>
+                            </div>
+                        </div>
+                
+                        <div class="assignee-wrapper">
+                            <label for="assignee-today">Кому:</label>
+                            <select id="assignee-today">
+                                <option value="Лёше">Лёше</option>
+                                <option value="Снеже">Снеже</option>
+                                <option value="Суперсемейка">Суперсемейка</option>
+                            </select>
+            
+                            <button class="add-button" id="today1" onclick="addTaskToday(event)">✔</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ДЕЛО -->
+                {% for t in data_today %}
+                <div class="task-item">
+                    <input type="checkbox" id="{{t[0]}}-task-{{t[1]}}">
+                    <label for="{{t[0]}}-task-{{t[1]}}">
+                        {% for t_t in t[2]%}
+                        <p>{{t_t}}</p>
+                        {% endfor %}
+                        <span>Назначено: {{t[3]}}</span>
+                        <span>Срок завершения: {{t[4]}}</span>
+                    </label>
+                    <div data-id="{{t[0]}}-task-{{t[1]}}" class="task-container">
+
+                        <!-- Модальное окно ввода рублей-->
+
+                        <div class="modalOverlayInput">
+                            <div class="modal-input">
+                                <textarea class="modaltextInput" placeholder="Введите число"></textarea>
+                                <button class="modalconfirmButton">✔</button>
+                            </div>
+                        </div>
+
+                        <div class="icon-list" data-toggle="dropdown"></div>
+                        {% if t[5] == true %}
+                        <div class="icon" style="background-color: #F5A623; background-image: url('/static/pictures/flag.png'); background-size: cover; margin-right: 4.5px; margin-top: 40px; width: 18px; height: 18px;"></div>
+                        {% endif %}
+                        <div class="dropdown-menu" style="display: none; right: 37px; top: 10px;">
+                            <ul>
+                                <li class="menu-item" id="{{t[0]}}-{{t[1]}}-1">Переназначить пользователя</li>
+                                <li class="menu-item has-submenu">Срок завершения
+                                    <ul class="submenu" style="display: none;">
+                                        <li class="submenu-item" id="{{t[0]}}-{{t[1]}}-2-1">Нет</li>
+                                        <li class="submenu-item" id="{{t[0]}}-{{t[1]}}-2-2">Сегодня</li>
+                                        <li class="submenu-item" id="{{t[0]}}-{{t[1]}}-2-3">Завтра</li>
+                                        <li class="submenu-item" id="{{t[0]}}-{{t[1]}}-2-4">На выходных</li>
+                                        <li class="submenu-item" id="{{t[0]}}-{{t[1]}}-2-5">На следующих выходных</li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item has-submenu">Переместить дело
+                                    <ul class="submenu" style="display: none;">
+                                        <li class="submenu-item" id="{{t[0]}}-{{t[1]}}-3-1">Сегодня</li>
+                                        <li class="submenu-item" id="{{t[0]}}-{{t[1]}}-3-2">На неделе</li>
+                                        <li class="submenu-item" id="{{t[0]}}-{{t[1]}}-3-3">В течении месяца</li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item" id="{{t[0]}}-{{t[1]}}-4">Приоритет</li>
+                                <li class="menu-item" id="{{t[0]}}-{{t[1]}}-5">Без приоритета</li>
+                                <li class="menu-item" id="{{t[0]}}-{{t[1]}}-6">Удалить дело</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- НА НЕДЕЛЕ -->
+
+            <div class="task-column">
+
+                <div class="task-column-obichniedela">
+                    <h2 style="margin-bottom: 0px;">На неделе</h2>
+                    <div class="iconstore" id="week2" style="background-color: #1E1E1E; background-image: url('/static/pictures/ecommerce-bag-plus.png'); background-size: cover;"></div>
+                </div>
+
+                <div id="taskModalWeek" class="modal">
+                    <div class="modal-content">
+                        <span class="close-button" id="week2" onclick="toggleModal(event)">&times;</span>
+                        <h2 style="font-size: 18px;">Добавить новую задачу</h2>
+                        <textarea id="task-text-week" rows="3"></textarea>
+                        
+                        <label for="task-text">Напомнить</label>
+                        
+                        <div class="reminder-wrapper">
+                            <label class="toggle-container-week" style="width: 50px;">
+                                <input type="checkbox" id="reminder-toggle-week" onclick="toggleReminderWeek()">
+                                <span class="slider"></span>
+                            </label>
+                            
+                            <div id="reminder-time-container-week" style="display: none;">
+                                <label for="reminder-time-week">через</label>
+                                <input type="number" id="reminder-time-week" min="1" max="24">
+                                <label for="reminder-time-week">часов</label>
+                            </div>
+                        </div>
+                
+                        <div class="assignee-wrapper">
+                            <label for="assignee-week">Кому:</label>
+                            <select id="assignee-week">
+                                <option value="Лёше">Лёше</option>
+                                <option value="Снеже">Снеже</option>
+                                <option value="Суперсемейка">Суперсемейка</option>
+                            </select>
+            
+                            <button class="add-button" id="week2" onclick="addTaskWeek(event)">✔</button>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- ДЕЛО -->
+                {% for w in data_week %}
+                <div class="task-item">
+                    <input type="checkbox" id="{{w[0]}}-task-{{w[1]}}">
+                    <label for="{{w[0]}}-task-{{w[1]}}">
+                        {% for t_w in w[2]%}
+                        <p>{{t_w}}</p>
+                        {% endfor %}
+                        <span>Назначено: {{w[3]}}</span>
+                        <span>Срок завершения: {{w[4]}}</span>
+                    </label>
+                    <div data-id="{{w[0]}}-task-{{w[1]}}" class="task-container">
+
+                        <!-- Модальное окно ввода рублей-->
+
+                        <div class="modalOverlayInput">
+                            <div class="modal-input">
+                                <textarea class="modaltextInput" placeholder="Введите число"></textarea>
+                                <button class="modalconfirmButton">✔</button>
+                            </div>
+                        </div>
+
+                        <div class="icon-list" data-toggle="dropdown"></div>
+                        {% if w[5] == true %}
+                        <div class="icon" style="background-color: #F5A623; background-image: url('/static/pictures/flag.png'); background-size: cover; margin-right: 4.5px; margin-top: 40px; width: 18px; height: 18px;"></div>
+                        {% endif %}
+                        <div class="dropdown-menu" style="display: none; right: 37px; top: 10px;">
+                            <ul>
+                                <li class="menu-item" id="{{w[0]}}-{{w[1]}}-1">Переназначить пользователя</li>
+                                <li class="menu-item has-submenu">Срок завершения
+                                    <ul class="submenu" style="display: none;">
+                                        <li class="submenu-item" id="{{w[0]}}-{{w[1]}}-2-1">Нет</li>
+                                        <li class="submenu-item" id="{{w[0]}}-{{w[1]}}-2-2">Сегодня</li>
+                                        <li class="submenu-item" id="{{w[0]}}-{{w[1]}}-2-3">Завтра</li>
+                                        <li class="submenu-item" id="{{w[0]}}-{{w[1]}}-2-4">На выходных</li>
+                                        <li class="submenu-item" id="{{w[0]}}-{{w[1]}}-2-5">На следующих выходных</li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item has-submenu">Переместить дело
+                                    <ul class="submenu" style="display: none;">
+                                        <li class="submenu-item" id="{{w[0]}}-{{w[1]}}-3-1">Сегодня</li>
+                                        <li class="submenu-item" id="{{w[0]}}-{{w[1]}}-3-2">На неделе</li>
+                                        <li class="submenu-item" id="{{w[0]}}-{{w[1]}}-3-3">В течении месяца</li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item" id="{{w[0]}}-{{w[1]}}-4">Приоритет</li>
+                                <li class="menu-item" id="{{w[0]}}-{{w[1]}}-5">Без приоритета</li>
+                                <li class="menu-item" id="{{w[0]}}-{{w[1]}}-6">Удалить дело</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- В ТЕЧЕНИИ МЕСЯЦА -->
+
+            <div class="task-column">
+
+                <div class="task-column-reguliariedela">
+                    <h2 style="margin-bottom: 0px;">В течении месяца</h2>
+                    <div class="iconstore" id="month3" style="background-color: #1E1E1E; background-image: url('/static/pictures/ecommerce-bag-plus.png'); background-size: cover;"></div>
+                </div>
+
+                <div id="taskModalMonth" class="modal">
+                    <div class="modal-content">
+                        <span class="close-button" id="month3" onclick="toggleModal(event)">&times;</span>
+                        <h2 style="font-size: 18px;">Добавить новую задачу</h2>
+                        <textarea id="task-text-month" rows="3"></textarea>
+                        
+                        <label for="task-text">Напомнить</label>
+                        
+                        <div class="reminder-wrapper">
+                            <label class="toggle-container-month" style="width: 50px;">
+                                <input type="checkbox" id="reminder-toggle-month" onclick="toggleReminderMonth()">
+                                <span class="slider"></span>
+                            </label>
+                            
+                            <div id="reminder-time-container-month" style="display: none;">
+                                <label for="reminder-time-month">через</label>
+                                <input type="number" id="reminder-time-month" min="1" max="24">
+                                <label for="reminder-time-month">часов</label>
+                            </div>
+                        </div>
+                
+                        <div class="assignee-wrapper">
+                            <label for="assignee-month">Кому:</label>
+                            <select id="assignee-month">
+                                <option value="Лёше">Лёше</option>
+                                <option value="Снеже">Снеже</option>
+                                <option value="Суперсемейка">Суперсемейка</option>
+                            </select>
+            
+                            <button class="add-button" id="month3" onclick="addTaskMonth(event)">✔</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ДЕЛО -->
+                {% for m in data_month %}
+                <div class="task-item">
+                    <input type="checkbox" id="{{m[0]}}-task-{{m[1]}}">
+                    <label for="{{m[0]}}-task-{{m[1]}}">
+                        {% for t_m in m[2]%}
+                        <p>{{t_m}}</p>
+                        {% endfor %}
+                        <span>Назначено: {{m[3]}}</span>
+                        <span>Срок завершения: {{m[4]}}</span>
+                    </label>
+                    <div data-id="{{m[0]}}-task-{{m[1]}}" class="task-container">
+                        
+                        <!-- Модальное окно ввода рублей-->
+
+                        <div class="modalOverlayInput">
+                            <div class="modal-input">
+                                <textarea class="modaltextInput" placeholder="Введите число"></textarea>
+                                <button class="modalconfirmButton">✔</button>
+                            </div>
+                        </div>
+                        
+                        <div class="icon-list" data-toggle="dropdown"></div>
+                        {% if m[5] == true %}
+                        <div class="icon" style="background-color: #F5A623; background-image: url('/static/pictures/flag.png'); background-size: cover; margin-right: 4.5px; margin-top: 40px; width: 18px; height: 18px;"></div>
+                        {% endif %}
+                        <div class="dropdown-menu" style="display: none; right: 37px; top: 10px;">
+                            <ul>
+                                <li class="menu-item" id="{{m[0]}}-{{m[1]}}-1">Переназначить пользователя</li>
+                                <li class="menu-item has-submenu">Срок завершения
+                                    <ul class="submenu" style="display: none;">
+                                        <li class="submenu-item" id="{{m[0]}}-{{m[1]}}-2-1">Нет</li>
+                                        <li class="submenu-item" id="{{m[0]}}-{{m[1]}}-2-2">Сегодня</li>
+                                        <li class="submenu-item" id="{{m[0]}}-{{m[1]}}-2-3">Завтра</li>
+                                        <li class="submenu-item" id="{{m[0]}}-{{m[1]}}-2-4">На выходных</li>
+                                        <li class="submenu-item" id="{{m[0]}}-{{m[1]}}-2-5">На следующих выходных</li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item has-submenu">Переместить дело
+                                    <ul class="submenu" style="display: none;">
+                                        <li class="submenu-item" id="{{m[0]}}-{{m[1]}}-3-1">Сегодня</li>
+                                        <li class="submenu-item" id="{{m[0]}}-{{m[1]}}-3-2">На неделе</li>
+                                        <li class="submenu-item" id="{{m[0]}}-{{m[1]}}-3-3">В течении месяца</li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item" id="{{m[0]}}-{{m[1]}}-4">Приоритет</li>
+                                <li class="menu-item" id="{{m[0]}}-{{m[1]}}-5">Без приоритета</li>
+                                <li class="menu-item" id="{{m[0]}}-{{m[1]}}-6">Удалить дело</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Модальное окно изменить кому -->
+
+        <div class="ModalWrapper">
+            <div class="modal-assignee-wrapper">
+                <select id="modal-assignee">
+                    <option value="Лёше">Лёше</option>
+                    <option value="Снеже">Снеже</option>
+                    <option value="Суперсемейка">Суперсемейка</option>
+                </select>
+                <button class="modalassigneeButton">✔</button>
+            </div>
+        </div>
+
+        <div class="block-menu">
+            <p>ИТОГО: {{data_sum_pay}} руб</p>
+        </div>
+    </div>
+
+    <script>
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('visible');
+        }
+
+        async function updateContent(section) {
+            const contentData = {
+                title: section
+            };
+    
+            const response = await fetch("/update_content", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(contentData)
+            });
+            const result = await response.json();
+
+            if (response.ok){
+                window.location.href = result.data;
+            }
+            }
+    </script>
+
+    <script src="/static/script_modal_store.js"></script>
+    <script src="/static/script_menu_store.js"></script>
+    <script src="/static/script_modal_input_store.js"></script>
+    <script src="/static/script_notification.js"></script>
+    <script src="/static/script_plan.js"></script>
+    <script src="/static/script_filter.js"></script>
+</body>
+</html>

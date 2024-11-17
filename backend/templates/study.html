@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учеба</title>
+    <link rel="stylesheet" href="/static/style/index-style.css">
+    <link rel="stylesheet" href="/static/style/modal_homework.css">
+    <link rel="stylesheet" href="/static/style/modal_exam.css">
+    <link rel="stylesheet" href="/static/style/menu-task-home.css">
+    <link rel="icon" href="/static/pictures/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <div class="sidebar">
+
+        <button class="close-menu" onclick="toggleSidebar()">×</button>
+
+        <div class="menu">
+            <div class="widget" onclick="sendGetRequest()">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #E94E77; background-image: url('/static/pictures/planning.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{data_count_plan}}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">В планах</div>
+            </div>
+            <div class="widget">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #C2C2C2; background-image: url('/static/pictures/mail.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{data_count.count_checkbox_false}}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Все</div>
+            </div>
+            <div class="widget">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #F5A623; background-image: url('/static/pictures/flag.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{data_count.count_priority}}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">С флажком</div>
+            </div>
+            <div class="widget">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #9B9B9B; background-image: url('/static/pictures/checkmark.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{data_count.count_checkbox_true}}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Завершено</div>
+            </div>
+        </div>
+        <div class="list">
+            <label for="my-list">
+                <span>Мои списки</span>
+            </label>
+
+            <div class="list-spisok">
+                <button class="home-button" onclick="updateContent('Дом')">Дом</button>
+                <button class="store-button" onclick="updateContent('Покупки')">Покупки</button>
+                <button class="universitet-button" onclick="updateContent('Учеба')">Учеба</button>
+            </div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="main-content">
+        <h1>Учеба</h1>
+        
+        <div class="task-section" style="margin-top: 10px;">
+
+            <!-- Домашние задания -->
+
+            <div class="task-column">
+                <div class="task-column-segodnia">
+                    <h2 style="margin-bottom: 0px;">Домашние задания</h2>
+                    <div class="iconstudy" id="homework1" style="background-color: #1E1E1E; background-image: url('/static/pictures/school_seminar.png'); background-size: cover;"></div>
+                </div>
+
+                <div id="taskModalHomework" class="modal">
+                    <div class="modal-content">
+                        <span class="close-button" id="homework1" onclick="toggleModal(event)">&times;</span>
+                        <h2 style="font-size: 18px;">Добавить новую задачу</h2>
+                        <textarea id="task-text-homework" rows="3"></textarea>
+                        
+                        <label for="task-text">Напомнить</label>
+                        
+                        <div class="reminder-wrapper">
+                            <label class="toggle-container-homework" style="width: 50px;">
+                                <input type="checkbox" id="reminder-toggle-homework" onclick="toggleReminderHomework()">
+                                <span class="slider"></span>
+                            </label>
+                            
+                            <div id="reminder-time-container-homework" style="display: none;">
+                                <label for="reminder-time-homework">через</label>
+                                <input type="number" id="reminder-time-homework" min="1" max="24">
+                                <label for="reminder-time-homework">часов</label>
+                            </div>
+                        </div>
+                
+                        <div class="assignee-wrapper">
+                            <button class="add-button" id="homework1" onclick="addTaskHomework(event)">✔</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ДЕЛО -->
+                {% for h in data_homework %}
+                <div class="task-item">
+                    <input type="checkbox" id="{{h[0]}}-task-{{h[1]}}">
+                    <label for="{{h[0]}}-task-{{h[1]}}">
+                        {% for t_h in h[2]%}
+                        <p>{{t_h}}</p>
+                        {% endfor %}
+                    </label>
+                    <div data-id="{{h[0]}}-task-{{h[1]}}" class="task-container">
+                        <div class="icon-list" data-toggle="dropdown"></div>
+                        {% if h[3] == true %}
+                        <div class="icon" style="background-color: #F5A623; background-image: url('/static/pictures/flag.png'); background-size: cover; margin-right: 4.5px; margin-top: 40px; width: 18px; height: 18px;"></div>
+                        {% endif %}
+                        <div class="dropdown-menu" style="display: none; right: 37px; top: 10px;">
+                            <ul>
+                                <li class="menu-item" id="{{h[0]}}-{{h[1]}}-4">Приоритет</li>
+                                <li class="menu-item" id="{{h[0]}}-{{h[1]}}-5">Без приоритета</li>
+                                <li class="menu-item" id="{{h[0]}}-{{h[1]}}-6">Удалить дело</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- ЭКЗАМЕНЫ -->
+
+            <div class="task-column">
+
+                <div class="task-column-obichniedela">
+                    <h2 style="margin-bottom: 0px;">Экзамены</h2>
+                    <div class="iconstudy" id="exam2" style="background-color: #1E1E1E; background-image: url('/static/pictures/school_seminar.png'); background-size: cover;"></div>
+                </div>
+
+                <div id="taskModalExam" class="modal">
+                    <div class="modal-content">
+                        <span class="close-button" id="exam2" onclick="toggleModal(event)">&times;</span>
+                        <h2 style="font-size: 18px;">Добавить новую задачу</h2>
+                        <textarea id="task-text-exam" rows="3"></textarea>
+                        
+                        <label for="task-text">Напомнить</label>
+                        
+                        <div class="reminder-wrapper">
+                            <label class="toggle-container-exam" style="width: 50px;">
+                                <input type="checkbox" id="reminder-toggle-exam" onclick="toggleReminderExam()">
+                                <span class="slider"></span>
+                            </label>
+                            
+                            <div id="reminder-time-container-exam" style="display: none;">
+                                <label for="reminder-time-exam">через</label>
+                                <input type="number" id="reminder-time-exam" min="1" max="24">
+                                <label for="reminder-time-exam">часов</label>
+                            </div>
+                        </div>
+                
+                        <div class="assignee-wrapper">
+                            <button class="add-button" id="exam2" onclick="addTaskExam(event)">✔</button>
+                        </div>
+                    </div>
+                </div>
+
+                {% for e in data_exam %}
+                <div class="task-item">
+                    <input type="checkbox" id="{{e[0]}}-task-{{e[1]}}">
+                    <label for="{{e[0]}}-task-{{e[1]}}">
+                        {% for t_e in e[2]%}
+                        <p>{{t_e}}</p>
+                        {% endfor %}
+                    </label>
+                    <div data-id="{{e[0]}}-task-{{e[1]}}" class="task-container">
+                        <div class="icon-list" data-toggle="dropdown"></div>
+                        {% if e[3] == true %}
+                        <div class="icon" style="background-color: #F5A623; background-image: url('/static/pictures/flag.png'); background-size: cover; margin-right: 4.5px; margin-top: 40px; width: 18px; height: 18px;"></div>
+                        {% endif %}
+                        <div class="dropdown-menu" style="display: none; right: 37px; top: 10px;">
+                            <ul>
+                                <li class="menu-item" id="{{e[0]}}-{{e[1]}}-4">Приоритет</li>
+                                <li class="menu-item" id="{{e[0]}}-{{e[1]}}-5">Без приоритета</li>
+                                <li class="menu-item" id="{{e[0]}}-{{e[1]}}-6">Удалить дело</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('visible');
+        }
+
+        async function updateContent(section) {
+            const contentData = {
+                title: section
+            };
+    
+            const response = await fetch("/update_content", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(contentData)
+            });
+            const result = await response.json();
+
+            if (response.ok){
+                window.location.href = result.data;
+            }
+            }
+    </script>
+
+    <script src="/static/script_modal_study.js"></script>
+    <script src="/static/script_checkbox_study.js"></script>
+    <script src="/static/script_menu_study.js"></script>
+    <script src="/static/script_plan.js"></script>
+</body>
+</html>
