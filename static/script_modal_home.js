@@ -55,8 +55,12 @@ async function addTaskUrgent(event) {
     if (reminderTime === "") {
         reminderTime = 0;
     }
-
-    showNotificationUrgent(taskText, assignee);
+    try {
+        showNotificationUrgent(taskText, assignee);
+    }
+    catch{
+        console.log('пропуск');
+    }
 
     toggleModal(event);
     
