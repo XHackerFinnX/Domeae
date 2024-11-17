@@ -48,11 +48,8 @@ body :-ms-input-placeholder {
   font-weight: 300;
 }
 .wrapper {
-  background: #f3f3f3;
-  background: -webkit-linear-gradient(top left, #fff3da 0%, #3a200f 100%);
-  background: -moz-linear-gradient(top left, #fff3da 0%, #3a200f 100%);
-  background: -o-linear-gradient(top left, #fff3da 0%, #3a200f 100%);
-  background: linear-gradient(to bottom right, #fff3da 0%, #3a200f 100%);
+  /* background: #98bfd0; */
+  background:#071a3dea;
   position: absolute;
   left: 0;
   width: 100%;
@@ -63,19 +60,20 @@ body :-ms-input-placeholder {
 }
 .wrapper.form-success .container h1 {
   font-size: 48px;
-  color: #dda3cf;
+  color: #7C5A66;
   transform: translateY(100px);
 }
-/* Цвет тени */
+/* Цвет тени и панели */
 .container {
-  background: linear-gradient(180deg, transparent 10%, rgba(73, 24, 4, 0.596) 10%), linear-gradient(180deg, transparent 20%, rgba(66, 27, 17, 0.322) 20%), linear-gradient(180deg, transparent 30%, rgba(92, 37, 16, 0.445) 30%), linear-gradient(180deg, transparent 40%, rgba(59, 19, 6, 0.445) 40%), linear-gradient(180deg, transparent 50%, rgba(43, 11, 1, 0.521) 50%), linear-gradient(180deg, transparent 60%, rgba(44, 12, 2, 0.733) 60%), linear-gradient(180deg, transparent 70%, rgba(53, 11, 4, 0.63) 70%), linear-gradient(180deg, transparent 80%, rgba(51, 21, 13, 0.87) 80%), linear-gradient(90deg, transparent 90%, rgba(145, 110, 83, 0.384) 90%), linear-gradient(90deg, transparent 100%, rgba(63, 26, 1, 0.932) 100%) rgba(158, 92, 61, 0.315);
+  background: linear-gradient(to bottom,
+  #d7a859,
+  #ffd691);
   width: 400px;
   margin: 0 auto;
   padding-top: 80px ;
   height: 350px;
   text-align: center;
-  border: 1px solid #3b272796;
-  box-shadow: 10px 10px 5px #2e1106;
+  border: 1px solid #000000;
 }
 .container h1 {
   font-size: 40px;
@@ -91,8 +89,8 @@ form {
 /* Цвет ввода */
 form input {
   outline: 0;
-  border: 1px solid rgba(235, 187, 56, 0.2);
-  background-color: rgba(214, 208, 209, 0.8);
+  border: 1px solid #ebbb3833;
+  background-color: #071a3dea;
   width: 250px;
   border-radius: 5px;
   padding: 10px 15px;
@@ -100,24 +98,24 @@ form input {
   display: block;
   text-align: center;
   font-size: 18px;
-  color: #000000;
+  color: #ffffff;
   transition-duration: 0.5s;
   font-weight: 300;
 }
  /* Цвет ввода при наведении */
 form input:hover {
-  background-color: rgba(233, 128, 198, 0.5);
+  background-color: #e09132;
 }
  /* Цвет ввода при нажатии */
 form input:focus {
-  background-color: #cc95a5;
+  background-color: #e09132;
   width: 300px;
   color: #000000;
 }
  /* Цвет кнопки основной */
 form button {
   font-family: 'Pompiere', sans-serif;
-  background-color: #d8a79b;
+  background-color: #eb7987bb;
   border: 0;
   margin: 10px auto 10px auto;
   padding: 10px 15px;
@@ -131,7 +129,7 @@ form button {
 }
  /* Цвет при наведении на кнопку */
 form button:hover {
-  background-color: rgb(126, 55, 67);
+  background-color: #e09132;
 }
 .bg-bubbles {
   position: absolute;
