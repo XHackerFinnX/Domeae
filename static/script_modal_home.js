@@ -56,7 +56,7 @@ async function addTaskUrgent(event) {
         reminderTime = 0;
     }
 
-    //showNotificationUrgent(taskText, assignee);
+    showNotificationUrgent(taskText, assignee);
 
     toggleModal(event);
     
