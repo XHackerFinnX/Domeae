@@ -9,6 +9,8 @@ from datetime import datetime
 from db.session import DataBaseHome, DataBaseFilter, DataBasePlan
 from db.models import main_completion_date
 
+from api.v2.bot_notice import send_message_home_add, send_message_home_update
+
 import asyncio
 
 router = APIRouter(
@@ -36,6 +38,7 @@ class UpdateCheckBox(BaseModel):
 class UpdateMenu(BaseModel):
     case_id: str
     menu_text: str
+    textp: str
     
 
 templates = Jinja2Templates(directory=r"./templates")
@@ -110,6 +113,21 @@ async def home_urgent(request: Request, data_home: DataHome, user: dict = Depend
             date_create=date_c
         )
         
+        if user == 35:
+            username = 'Лёше'
+            chat_id = 1604126296
+        
+        elif user == 807:
+            username = 'Снеже'
+            chat_id = 1387002896
+
+        await send_message_home_add(
+            chat_id,
+            data_home.case_text,
+            data_home.text_task,
+            data_home.user_name
+        )
+        
         return JSONResponse(content={
             'message': 'ok urgent',
             'data': '/home'
@@ -138,6 +156,21 @@ async def home_normal(request: Request, data_home: DataHome, user: dict = Depend
             reminder=data_home.reminder,
             checkbox=False,
             date_create=date_c
+        )
+        
+        if user == 35:
+            username = 'Лёше'
+            chat_id = 1604126296
+        
+        elif user == 807:
+            username = 'Снеже'
+            chat_id = 1387002896
+
+        await send_message_home_add(
+            chat_id,
+            data_home.case_text,
+            data_home.text_task,
+            data_home.user_name
         )
         
         return JSONResponse(content={
@@ -170,6 +203,21 @@ async def home_regular(request: Request, data_home: DataHome, user: dict = Depen
             date_create=date_c
         )
         
+        if user == 35:
+            username = 'Лёше'
+            chat_id = 1604126296
+        
+        elif user == 807:
+            username = 'Снеже'
+            chat_id = 1387002896
+
+        await send_message_home_add(
+            chat_id,
+            data_home.case_text,
+            data_home.text_task,
+            data_home.user_name
+        )
+        
         return JSONResponse(content={
             'message': 'ok regular',
             'data': '/home'
@@ -199,12 +247,24 @@ async def home_menu(request: Request, data_username: UpdateMenu, user: dict = De
     if user:
         dun = data_username.case_id.split('-')
         text_m = data_username.menu_text
+        text_p = data_username.textp
+
+        if user == 35:
+            username = 'Лёше'
+            chat_id = 1604126296
+        
+        elif user == 807:
+            username = 'Снеже'
+            chat_id = 1387002896
+            
         
         if len(dun) == 3:
             
             if dun[2] == '1':
                 
                 await db.update_user_name(dun[0], int(dun[1]), text_m)
+                
+                await send_message_home_update(chat_id, text_p, f'Назначено {text_m}')
                 
             elif dun[2] == '4':
                 
@@ -235,6 +295,8 @@ async def home_menu(request: Request, data_username: UpdateMenu, user: dict = De
                     
                 except RuntimeError:
                     print("Срок завершения")
+                
+                await send_message_home_update(chat_id, text_p, f'Срок завершения {db.update_completion_date}')
 
             elif dun[2] == '3':
                 
@@ -243,18 +305,24 @@ async def home_menu(request: Request, data_username: UpdateMenu, user: dict = De
                     num_case = await db.case_id_home(case_id='urgent')
                     
                     await db.update_case('urgent', num_case, dun[0], int(dun[1]), 'Срочное дело')
+                    
+                    await send_message_home_update(chat_id, text_p, f'Переместили в Срочное дело')
                 
                 elif text_m == 'Обычное дело':
                     
                     num_case = await db.case_id_home(case_id='normal')
                     
                     await db.update_case('normal', num_case, dun[0], int(dun[1]), 'Обычное дело')
+                    
+                    await send_message_home_update(chat_id, text_p, f'Переместили в Обычное дело')
                 
                 elif text_m == 'Регулярное дело':
                     
                     num_case = await db.case_id_home(case_id='regular')
                     
                     await db.update_case('regular', num_case, dun[0], int(dun[1]), 'Регулярное дело')
+                    
+                    await send_message_home_update(chat_id, text_p, f'Переместили в Регулярное дело')
         
         return JSONResponse(content={
             'message': 'ok menu_update',
