@@ -1,13 +1,6 @@
-from fastapi import APIRouter, Request, HTTPException, status
+from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
-from fastapi.responses import JSONResponse
-
-from starlette.middleware.sessions import SessionMiddleware
-
-from pydantic import BaseModel
-
-from core.config import config
 
 
 router = APIRouter(
