@@ -19,3 +19,4 @@ openpyxl
 xlrd==1.2.0
 ujson
 aiofiles
+requests
