@@ -9,6 +9,8 @@ from datetime import datetime
 from db.session import DataBaseStory, DataBaseFilter, DataBasePlan
 from db.models import main_completion_date_store
 
+from api.v2.bot_notice import send_message_store_add, send_message_store_update
+
 import asyncio
 
 
@@ -38,6 +40,7 @@ class UpdateCheckBox(BaseModel):
 class UpdateMenu(BaseModel):
     case_id: str
     menu_text: str
+    textp: str
 
 templates = Jinja2Templates(directory=r"./templates")
 
@@ -113,6 +116,21 @@ async def post_today(request: Request, data_store: DataStore, user: dict = Depen
             date_create=date_c
         )
         
+        if user == 35:
+            username = 'Лёше'
+            chat_id = 1604126296
+        
+        elif user == 807:
+            username = 'Снеже'
+            chat_id = 1387002896
+
+        await send_message_store_add(
+            chat_id,
+            data_store.case_text,
+            data_store.text_task,
+            data_store.user_name
+        )
+        
         return JSONResponse(content={
             'message': 'ok today',
             'data': '/store'
@@ -142,6 +160,21 @@ async def post_week(request: Request, data_store: DataStore, user: dict = Depend
             sum_pay=0,
             checkbox=False,
             date_create=date_c
+        )
+        
+        if user == 35:
+            username = 'Лёше'
+            chat_id = 1604126296
+        
+        elif user == 807:
+            username = 'Снеже'
+            chat_id = 1387002896
+
+        await send_message_store_add(
+            chat_id,
+            data_store.case_text,
+            data_store.text_task,
+            data_store.user_name
         )
         
         return JSONResponse(content={
@@ -175,6 +208,21 @@ async def post_month(request: Request, data_store: DataStore, user: dict = Depen
             date_create=date_c
         )
         
+        if user == 35:
+            username = 'Лёше'
+            chat_id = 1604126296
+        
+        elif user == 807:
+            username = 'Снеже'
+            chat_id = 1387002896
+
+        await send_message_store_add(
+            chat_id,
+            data_store.case_text,
+            data_store.text_task,
+            data_store.user_name
+        )
+        
         return JSONResponse(content={
             'message': 'ok month',
             'data': '/store'
@@ -205,12 +253,23 @@ async def store_menu(request: Request, data_menu: UpdateMenu, user: dict = Depen
     if user:
         dun = data_menu.case_id.split('-')
         text_m = data_menu.menu_text
+        text_p = data_menu.textp
+
+        if user == 35:
+            username = 'Лёше'
+            chat_id = 1604126296
+        
+        elif user == 807:
+            username = 'Снеже'
+            chat_id = 1387002896
         
         if len(dun) == 3:
             
             if dun[2] == '1':
                 
                 await db.update_user_name_store(dun[0], int(dun[1]), text_m)
+                
+                await send_message_store_update(chat_id, text_p, f'Назначено {text_m}')
                 
             elif dun[2] == '4':
                 
@@ -241,6 +300,8 @@ async def store_menu(request: Request, data_menu: UpdateMenu, user: dict = Depen
                     
                 except RuntimeError:
                     print("Срок завершения")
+                    
+                await send_message_store_update(chat_id, text_p, f'Срок завершения {db.update_completion_date}')
 
             elif dun[2] == '3':
                 
@@ -249,18 +310,24 @@ async def store_menu(request: Request, data_menu: UpdateMenu, user: dict = Depen
                     num_case = await db.case_id_store(case_id='today')
                     
                     await db.update_case_store('today', num_case, dun[0], int(dun[1]), 'Сегодня')
+                    
+                    await send_message_store_update(chat_id, text_p, f'Переместили в Сегодня')
                 
                 elif text_m == 'На неделе':
                     
                     num_case = await db.case_id_store(case_id='week')
                     
                     await db.update_case_store('week', num_case, dun[0], int(dun[1]), 'На неделе')
+                    
+                    await send_message_store_update(chat_id, text_p, f'Переместили в На неделе')
                 
                 elif text_m == 'В течении месяца':
                     
                     num_case = await db.case_id_store(case_id='month')
                     
                     await db.update_case_store('month', num_case, dun[0], int(dun[1]), 'В течении месяца')
+                    
+                    await send_message_store_update(chat_id, text_p, f'Переместили В течении месяца')
         
         return JSONResponse(content={
             'message': 'ok menu_update_store',
