@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     POSTGRESQL_PORT: SecretStr
     POSTGRESQL_DATABASE: SecretStr
     SECRET_AUTH: SecretStr
+    BOT_TOKEN: SecretStr
     
     model_config: SettingsConfigDict = SettingsConfigDict(
         env_file='.env',
