@@ -42,10 +42,9 @@ document.addEventListener('click', async function(event) {
 
         const textp = document.querySelector('.task-item')
         const textpText = textp.querySelector('label p').innerText;
-        //showNotification(textpText);
 
-        console.log(event.target.id, event.target.innerText);
-        await updateMenuHome(event.target.id, event.target.innerText);
+        console.log(event.target.id, event.target.innerText, textpText);
+        await updateMenuHome(event.target.id, event.target.innerText, textpText);
     }
 
     // Закрытие модального окна при нажатии на кнопку
@@ -56,13 +55,12 @@ document.addEventListener('click', async function(event) {
         const selectElement = document.getElementById('modal-assignee');
         const selectedValue = selectElement.value;
 
-        console.log(item_id, selectedValue);
-
         const textp = document.querySelector('.task-item')
         const textpText = textp.querySelector('label p').innerText;
-        //showNotification(textpText);
+        
+        console.log(item_id, selectedValue, textpText);
 
-        await updateMenuHome(item_id, selectedValue);
+        await updateMenuHome(item_id, selectedValue, textpText);
     }
 
     if (event.target.matches('.has-submenu')) {
@@ -78,16 +76,17 @@ document.addEventListener('click', async function(event) {
         const textpText = textp.querySelector('label p').innerText;
         //showNotification(textpText);
 
-        console.log(event.target.id, event.target.innerText);
-        await updateMenuHome(event.target.id, event.target.innerText);
+        console.log(event.target.id, event.target.innerText, textpText);
+        await updateMenuHome(event.target.id, event.target.innerText, textpText);
     }
 });
 
 
-async function updateMenuHome(case_id, menu_text) {
+async function updateMenuHome(case_id, menu_text, textp) {
     const contentData = {
         case_id: case_id,
-        menu_text: menu_text
+        menu_text: menu_text,
+        textp: textp
     };
 
     const response = await fetch("/update_menu", {

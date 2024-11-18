@@ -44,9 +44,8 @@ document.addEventListener('click', async function(event) {
 
         const textp = document.querySelector('.task-item')
         const textpText = textp.querySelector('label p').innerText;
-        //showNotification(textpText);
 
-        await updateMenuStore(event.target.id, event.target.innerText);
+        await updateMenuStore(event.target.id, event.target.innerText, textpText);
     }
 
     // Закрытие модального окна при нажатии на кнопку
@@ -59,11 +58,10 @@ document.addEventListener('click', async function(event) {
 
         const textp = document.querySelector('.task-item')
         const textpText = textp.querySelector('label p').innerText;
-        //showNotification(textpText);
 
         console.log(item_id, selectedValue);
 
-        await updateMenuStore(item_id, selectedValue);
+        await updateMenuStore(item_id, selectedValue, textpText);
     }
 
     if (event.target.matches('.has-submenu')) {
@@ -79,16 +77,16 @@ document.addEventListener('click', async function(event) {
 
         const textp = document.querySelector('.task-item')
         const textpText = textp.querySelector('label p').innerText;
-        //showNotification(textpText);
 
-        await updateMenuStore(event.target.id, event.target.innerText);
+        await updateMenuStore(event.target.id, event.target.innerText, textpText);
     }
 });
 
-async function updateMenuStore(case_id, menu_text) {
+async function updateMenuStore(case_id, menu_text, textp) {
     const contentData = {
         case_id: case_id,
-        menu_text: menu_text
+        menu_text: menu_text,
+        textp: textp
     };
 
     const response = await fetch("/update_menu_store", {
