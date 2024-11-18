@@ -296,7 +296,7 @@ async def home_menu(request: Request, data_username: UpdateMenu, user: dict = De
                 except RuntimeError:
                     print("Срок завершения")
                 
-                await send_message_home_update(chat_id, text_p, f'Срок завершения {db.update_completion_date}')
+                await send_message_home_update(chat_id, text_p, f'Срок завершения изменился')
 
             elif dun[2] == '3':
                 

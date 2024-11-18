@@ -301,7 +301,7 @@ async def store_menu(request: Request, data_menu: UpdateMenu, user: dict = Depen
                 except RuntimeError:
                     print("Срок завершения")
                     
-                await send_message_store_update(chat_id, text_p, f'Срок завершения {db.update_completion_date}')
+                await send_message_store_update(chat_id, text_p, f'Срок завершения изменился')
 
             elif dun[2] == '3':
                 
