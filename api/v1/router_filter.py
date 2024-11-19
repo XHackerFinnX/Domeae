@@ -10,7 +10,7 @@ from db.session import DataBaseFilter
 
 router = APIRouter(
     prefix="",
-    tags=["Home"]
+    tags=["Filter"]
 )
 
 db_filter = DataBaseFilter()
@@ -20,6 +20,10 @@ class ContentUpdateRequest(BaseModel):
     
 class OptionFilter(BaseModel):
     option: str
+    
+class OptionFilterCompleted(BaseModel):
+    option: str
+    name: str
     
 templates = Jinja2Templates(directory=r"./templates")
 
@@ -58,6 +62,19 @@ async def filter_delete_post(request: Request, option_v: OptionFilter, user: dic
         return JSONResponse(content={
                 'message': 'filter ok',
                 'data': '/'
+            })
+    else:
+        return templates.TemplateResponse("auth.html", {"request": request})
+    
+
+@router.post("/filter_completed")
+async def filter_completed_post(request: Request, option_c: OptionFilterCompleted, user: dict = Depends(get_current_user)):
+    
+    if user:
+        
+        return JSONResponse(content={
+                'message': 'completed ok',
+                'data': f'/completed?name={option_c.name}'
             })
     else:
         return templates.TemplateResponse("auth.html", {"request": request})
