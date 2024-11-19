@@ -15,6 +15,7 @@ from api.v1.router_store import router as router_store
 from api.v1.router_study import router as router_study
 from api.v1.router_plan import router as router_plan
 from api.v1.router_filter import router as router_filter
+from api.v1.router_complet import router as router_complet
 
 from core.config import config
 
@@ -50,6 +51,7 @@ app.include_router(router_store)
 app.include_router(router_study)
 app.include_router(router_plan)
 app.include_router(router_filter)
+app.include_router(router_complet)
 
 class LoginData(BaseModel):
     username: int
