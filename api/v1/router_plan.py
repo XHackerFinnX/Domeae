@@ -13,7 +13,7 @@ from datetime import datetime
 
 router = APIRouter(
     prefix="",
-    tags=["Home"]
+    tags=["Plan"]
 )
 
 dbplan = DataBasePlan()
