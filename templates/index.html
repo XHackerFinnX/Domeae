@@ -43,7 +43,7 @@
                 </div>
                 <div class="text" style="padding-top: 20px;padding-bottom: 0px;">С флажком</div>
             </div>
-            <div class="widget" onclick="sendPostCompleted('completed')">
+            <div class="widget" onclick="sendPostCompleted('completed', 'all')">
                 <div class="icon-count-container">
                     <div class="icon" style="background-color: #9B9B9B; background-image: url('/static/pictures/checkmark.png'); background-size: cover;"></div>
                     <div class="count" style="padding-right: 0px;">{{data_count_all_checkbox_true}}</div>
@@ -111,12 +111,7 @@
             }
         }
     </script>
-
-    <!-- <script src="/static/script_notification.js?v=1.0"></script> -->
     <script src="/static/script_plan.js?v=1.0"></script>
     <script src="/static/script_filter.js?v=1.0"></script>
-
-    <script type="text/javascript" src="//www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
-    <script type="text/javascript" src="/firebase-messaging-sw.js"></script>
 </body>
 </html>
