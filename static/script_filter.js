@@ -58,12 +58,13 @@ async function sendPostUser(section) {
     }
 }
 
-async function sendPostCompleted(section) {
+async function sendPostCompleted(section, name) {
     const contentData = {
-        option: section
+        option: section,
+        name: name
     };
 
-    const response = await fetch("/filter", {
+    const response = await fetch("/filter_completed", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
