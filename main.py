@@ -40,7 +40,7 @@ app.add_middleware(
     SessionMiddleware,
     secret_key=config.SECRET_AUTH.get_secret_value(),
     session_cookie="session",
-    max_age=2592000
+    max_age=10
 )
 
 app.include_router(router_auth)
