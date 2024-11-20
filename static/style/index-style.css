@@ -259,6 +259,20 @@ input[type="checkbox"]:checked + label:after {
     position: relative;
 }
 
+.icon-bin {
+    width: 20px;
+    height: 20px;
+    margin: auto;
+    margin-right: 0px;
+    margin-top: 0px;
+    background-color: #444444;
+    background-image: url('/static/pictures/dustbin.png');
+    background-size: cover;
+    flex-shrink: 0;
+    cursor: pointer;
+    position: relative;
+}
+
 .task-column-srochniedela {
     display: flex;
     align-items: center;
