@@ -1808,3 +1808,98 @@ class DataBasePlan:
                 self._connection.close()
                 
                 return count_plane
+            
+            
+class DataBaseCompleted:
+    def __init__(self):
+        self._connection = None
+
+    def _connect(self):
+        if not self._connection or self._connection.closed:
+            self._connection = psycopg2.connect(
+                host=config.POSTGRESQL_HOST.get_secret_value(),
+                database=config.POSTGRESQL_DATABASE.get_secret_value(),
+                user=config.POSTGRESQL_USER.get_secret_value(),
+                password=config.POSTGRESQL_PASSWORD.get_secret_value(),
+                port=config.POSTGRESQL_PORT.get_secret_value()
+            )
+        return self._connection
+    
+    async def completed_home(self):
+        query = f"""
+            SELECT 
+            text_task,
+            user_name
+            FROM public.house_case
+            WHERE checkbox = true
+        """
+        
+        try:
+            with self._connect() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(query)
+                    date_home = cursor.fetchall()
+
+                conn.commit()
+        except (InterfaceError, Error) as error:
+            print(f"Ошибка получения completed_home {error}")
+        finally:
+            if self._connection:
+                self._connection.close()
+
+                return date_home
+            
+    async def completed_store(self):
+        query = f"""
+            SELECT 
+            text_task,
+            user_name,
+            sum_pay
+            FROM public.store_case
+            WHERE checkbox = true
+        """
+        
+        try:
+            with self._connect() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(query)
+                    date_store = cursor.fetchall()
+
+                conn.commit()
+        except (InterfaceError, Error) as error:
+            print(f"Ошибка получения completed_store {error}")
+        finally:
+            if self._connection:
+                self._connection.close()
+
+                return date_store
+            
+    async def delete_completed(self, text_task: str, username: str, price: str):
+        
+        if not price:
+            query = f"""
+                DELETE FROM public.house_case
+                WHERE text_task = '{text_task}' 
+                AND user_name = '{username}'
+                AND checkbox = true
+            """
+        else:
+            query = f"""
+                DELETE FROM public.house_case
+                WHERE text_task = '{text_task}' 
+                AND user_name = '{username}'
+                AND sum_pay = {int(price)}
+                AND checkbox = true
+            """
+        
+        try:
+            with self._connect() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(query)
+
+                conn.commit()
+        except (InterfaceError, Error) as error:
+            print(f"Ошибка удаления completed {error}")
+        finally:
+            if self._connection:
+                self._connection.close()
