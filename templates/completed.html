@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная</title>
+    <link rel="stylesheet" href="/static/style/index-style.css">
+    <link rel="stylesheet" href="/static/style/menu-task-plan.css">
+    <link rel="icon" href="/static/pictures/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <div class="sidebar">
+
+        <button class="close-menu" onclick="toggleSidebar()">×</button>
+
+        <div class="menu">
+            <div class="widget" onclick="sendGetRequest()">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #E94E77; background-image: url('/static/pictures/planning.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{data_count}}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">В планах</div>
+            </div>
+            <div class="widget">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #4A90E2; background-image: url('/static/pictures/calendar.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{data_count_all_completion_date}}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Сегодня</div>
+            </div>
+            <div class="widget">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #C2C2C2; background-image: url('/static/pictures/mail.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{data_count_all_checkbox_false}}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Все</div>
+            </div>
+            <div class="widget">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #F5A623; background-image: url('/static/pictures/flag.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{data_count_all_priority}}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">С флажком</div>
+            </div>
+            <div class="widget">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #9B9B9B; background-image: url('/static/pictures/checkmark.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{data_count_all_checkbox_true}}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Завершено</div>
+            </div>
+            <div class="widget">
+                <div class="icon-count-container">
+                    <div class="icon" style="background-color: #7ED321; background-image: url('/static/pictures/user.png'); background-size: cover;"></div>
+                    <div class="count" style="padding-right: 0px;">{{data_count_all_user_name}}</div>
+                </div>
+                <div class="text" style="padding-top: 20px;padding-bottom: 0px;">Назначено</div>
+            </div>
+        </div>
+        <div class="list">
+            <label for="my-list">
+                <span>Мои списки</span>
+            </label>
+
+            <div class="list-spisok">
+                <button class="home-button" onclick="updateContent('Дом')">Дом</button>
+                <button class="store-button" onclick="updateContent('Покупки')">Покупки</button>
+                <button class="universitet-button" onclick="updateContent('Учеба')">Учеба</button>
+            </div>
+        </div>
+    </div>
+    <div class="divider"></div>
+
+    <div class="main-content">
+        
+        <div class="task-section" style="margin-top: 10px;">
+            <div class="task-column">
+                <div class="task-column-plan">
+                    <h2 style="margin-bottom: 0px;">Завершено</h2>
+                </div>
+
+                {% for p in data_completed %}
+                <div class="task-item">
+                    <label id="comp-task-{{p[3]}}" for="comp-task-{{p[3]}}">
+                        <p>{{p[0]}}</p>
+                        <span>Назначено: {{p[1]}}</span>
+                        {% if p[2] %}
+                        <b><span>{{p[2]}} руб.</span></b>
+                        {% endif %}
+                    </label>
+                    <div data-id="comp-task-{{p[3]}}" class="task-container">
+                        <div class="icon-bin" data-toggle="dropdown"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('visible');
+        }
+
+        async function updateContent(section) {
+            const contentData = {
+                title: section
+            };
+    
+            const response = await fetch("/update_content", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(contentData)
+            });
+            
+            const result = await response.json();
+
+            if (response.ok){
+                window.location.href = result.data;
+            }
+        }
+    </script>
+    <script src="/static/script_plan.js?v=1.0"></script>
+    <script src="/static/script_bin_comp.js?v=1.0"></script>
+</body>
+</html>
