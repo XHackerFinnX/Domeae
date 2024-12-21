@@ -124,12 +124,27 @@ async def post_today(request: Request, data_store: DataStore, user: dict = Depen
             username = 'Снеже'
             chat_id = 1387002896
 
-        await send_message_store_add(
-            chat_id,
-            data_store.case_text,
-            data_store.text_task,
-            data_store.user_name
-        )
+        if data_store.user_name == 'Суперсемейка':
+            await send_message_store_add(
+                1604126296,
+                data_store.case_text,
+                data_store.text_task,
+                data_store.user_name
+            )
+            
+            await send_message_store_add(
+                1387002896,
+                data_store.case_text,
+                data_store.text_task,
+                data_store.user_name
+            )
+        else:
+            await send_message_store_add(
+                chat_id,
+                data_store.case_text,
+                data_store.text_task,
+                data_store.user_name
+            )
         
         return JSONResponse(content={
             'message': 'ok today',
