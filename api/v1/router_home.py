@@ -166,7 +166,7 @@ async def home_normal(request: Request, data_home: DataHome, user: dict = Depend
             username = 'Снеже'
             chat_id = 1387002896
             
-
+        print(data_home.user_name, 'Суперсемейка', data_home.user_name == 'Суперсемейка')
         if data_home.user_name == 'Суперсемейка':
             await send_message_home_add(
                 1604126296,
