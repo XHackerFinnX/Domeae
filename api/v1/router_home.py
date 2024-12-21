@@ -121,12 +121,27 @@ async def home_urgent(request: Request, data_home: DataHome, user: dict = Depend
             username = 'Снеже'
             chat_id = 1387002896
 
-        await send_message_home_add(
-            chat_id,
-            data_home.case_text,
-            data_home.text_task,
-            data_home.user_name
-        )
+        if data_home.user_name == 'Суперсемейка':
+            await send_message_home_add(
+                1604126296,
+                data_home.case_text,
+                data_home.text_task,
+                data_home.user_name
+            )
+            
+            await send_message_home_add(
+                1387002896,
+                data_home.case_text,
+                data_home.text_task,
+                data_home.user_name
+            )
+        else:
+            await send_message_home_add(
+                chat_id,
+                data_home.case_text,
+                data_home.text_task,
+                data_home.user_name
+            )
         
         return JSONResponse(content={
             'message': 'ok urgent',
@@ -166,7 +181,6 @@ async def home_normal(request: Request, data_home: DataHome, user: dict = Depend
             username = 'Снеже'
             chat_id = 1387002896
             
-        print(data_home.user_name, 'Суперсемейка', data_home.user_name == 'Суперсемейка')
         if data_home.user_name == 'Суперсемейка':
             await send_message_home_add(
                 1604126296,
@@ -227,12 +241,27 @@ async def home_regular(request: Request, data_home: DataHome, user: dict = Depen
             username = 'Снеже'
             chat_id = 1387002896
 
-        await send_message_home_add(
-            chat_id,
-            data_home.case_text,
-            data_home.text_task,
-            data_home.user_name
-        )
+        if data_home.user_name == 'Суперсемейка':
+            await send_message_home_add(
+                1604126296,
+                data_home.case_text,
+                data_home.text_task,
+                data_home.user_name
+            )
+            
+            await send_message_home_add(
+                1387002896,
+                data_home.case_text,
+                data_home.text_task,
+                data_home.user_name
+            )
+        else:
+            await send_message_home_add(
+                chat_id,
+                data_home.case_text,
+                data_home.text_task,
+                data_home.user_name
+            )
         
         return JSONResponse(content={
             'message': 'ok regular',
