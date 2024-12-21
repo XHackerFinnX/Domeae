@@ -7,6 +7,23 @@
     <link rel="stylesheet" href="/static/style/index-style.css">
     <link rel="stylesheet" href="/static/style/menu-task-plan.css">
     <link rel="icon" href="/static/pictures/favicon.ico" type="image/x-icon">
+    <style>
+        .delete-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        .task-item {
+            position: relative;
+        }
+        .select-task {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
 </head>
 <body>
     <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
@@ -79,19 +96,23 @@
             <div class="task-column">
                 <div class="task-column-plan">
                     <h2 style="margin-bottom: 0px;">Завершено</h2>
+                    <button id="deleteSelected" class="delete-button" style="display: none;">
+                        <img src="/static/pictures/dustbin.png" alt="Delete" style="width: 20px; height: 20px;">
+                    </button>
                 </div>
 
                 {% for p in data_completed %}
                 <div class="task-item">
-                    <label id="comp-task-{{p[3]}}" for="comp-task-{{p[3]}}">
+                    <input type="checkbox" id="select-task-{{p[3]}}" class="select-task" style="display: none;">
+                    <label for="select-task-{{p[3]}}">
                         <p>{{p[0]}}</p>
                         <span>Назначено: {{p[1]}}</span>
                         {% if p[2] %}
                         <b><span>{{p[2]}} руб.</span></b>
                         {% endif %}
                     </label>
-                    <div data-id="comp-task-{{p[3]}}" class="task-container">
-                        <div class="icon-bin" data-toggle="dropdown"></div>
+                    <div class="task-container">
+                        <div class="icon-bin" data-id="{{p[3]}}"></div>
                     </div>
                 </div>
                 {% endfor %}
@@ -122,6 +143,60 @@
             const result = await response.json();
 
             if (response.ok){
+                window.location.href = result.data;
+            }
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const deleteButton = document.getElementById('deleteSelected');
+            const checkboxes = document.querySelectorAll('.select-task');
+
+            // Показать чекбоксы и кнопку удаления при наведении на task-section
+            document.querySelector('.task-section').addEventListener('mouseenter', () => {
+                checkboxes.forEach(cb => cb.style.display = 'block');
+                deleteButton.style.display = 'block';
+            });
+
+            document.querySelector('.task-section').addEventListener('mouseleave', () => {
+                if (!Array.from(checkboxes).some(cb => cb.checked)) {
+                    checkboxes.forEach(cb => cb.style.display = 'none');
+                    deleteButton.style.display = 'none';
+                }
+            });
+
+            // Обработчик для кнопки удаления
+            deleteButton.addEventListener('click', async () => {
+                const selectedTasks = Array.from(checkboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => {
+                        const taskItem = cb.closest('.task-item');
+                        return {
+                            id: cb.id.split('-')[2],
+                            content: taskItem.querySelector('p').innerText,
+                            assigned: taskItem.querySelector('span').innerText.replace('Назначено: ', ''),
+                            price: taskItem.querySelector('b > span')?.innerText || ''
+                        };
+                    });
+
+                if (selectedTasks.length > 0) {
+                    await DeleteSelectedCompleted(selectedTasks);
+                }
+            });
+        });
+
+        async function DeleteSelectedCompleted(tasks) {
+            const response = await fetch("/delete_selected_completed", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({tasks})
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
                 window.location.href = result.data;
             }
         }

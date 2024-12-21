@@ -26,6 +26,10 @@ class DeletComplet(BaseModel):
     pcontent: str
     sassigned: str
     sprice: str
+    
+
+class DeleteSelectedCompleted(BaseModel):
+    tasks: list
 
     
 templates = Jinja2Templates(directory=r"./templates")
@@ -101,5 +105,18 @@ async def delete_completed_post(request: Request, data_comp: DeletComplet, user:
             'data': f'/completed?name={name_c}'
         })
         
+    else:
+        return templates.TemplateResponse("auth.html", {"request": request})
+    
+
+@router.post("/delete_selected_completed")
+async def delete_selected_completed_post(request: Request, data_del: DeleteSelectedCompleted, user: dict = Depends(get_current_user)):
+
+    if user:
+        print(data_del)
+        return JSONResponse(content={
+            'message': 'ok',
+            'data': '/'
+        })
     else:
         return templates.TemplateResponse("auth.html", {"request": request})
