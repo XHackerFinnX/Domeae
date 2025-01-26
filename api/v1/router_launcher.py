@@ -1,11 +1,19 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import FileResponse
+from fastapi.templating import Jinja2Templates
 from pathlib import Path
 
 router = APIRouter(
     prefix="",
     tags=["Launcher"]
 )
+
+templates = Jinja2Templates(directory=r"./templates")
+
+@router.get("/file/download")
+def get_download(request: Request):
+    return templates.TemplateResponse("download.html", {"request": request})
+    
 
 @router.get("/file/download/1201-forge-zip")
 def download_file():
