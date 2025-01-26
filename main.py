@@ -16,6 +16,7 @@ from api.v1.router_study import router as router_study
 from api.v1.router_plan import router as router_plan
 from api.v1.router_filter import router as router_filter
 from api.v1.router_complet import router as router_complet
+from api.v1.router_launcher import router as router_launcher
 
 from core.config import config
 
@@ -52,6 +53,7 @@ app.include_router(router_study)
 app.include_router(router_plan)
 app.include_router(router_filter)
 app.include_router(router_complet)
+app.include_router(router_launcher)
 
 class LoginData(BaseModel):
     username: int
@@ -78,4 +80,5 @@ async def post_login(request: Request, data: LoginData):
  
 @app.get("/favicon.ico")
 async def favicon():
+    return True
     return FileResponse("/static/pictures/favicon.ico")
