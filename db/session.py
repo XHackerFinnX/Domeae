@@ -1903,3 +1903,64 @@ class DataBaseCompleted:
         finally:
             if self._connection:
                 self._connection.close()
+                
+class DataBasEenemies:
+    def __init__(self):
+        self._connection = None
+
+    def _connect(self):
+        if not self._connection or self._connection.closed:
+            self._connection = psycopg2.connect(
+                host=config.POSTGRESQL_HOST.get_secret_value(),
+                database=config.POSTGRESQL_DATABASE.get_secret_value(),
+                user=config.POSTGRESQL_USER.get_secret_value(),
+                password=config.POSTGRESQL_PASSWORD.get_secret_value(),
+                port=config.POSTGRESQL_PORT.get_secret_value()
+            )
+        return self._connection
+    
+    async def add_name(self, name):
+        query = """INSERT INTO public.enemies_user (name) VALUES (%s)"""
+        
+        try:
+            with self._connect() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(query, (name, ))
+                conn.commit()
+        except (InterfaceError, Error) as error:
+            print(error)
+        finally:
+            if self._connection:
+                self._connection.close()
+                
+    async def select_name(self):
+        query = """SELECT id, name FROM public.enemies_user"""
+        
+        try:
+            with self._connect() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(query)
+                    name_list = cursor.fetchall()
+
+                conn.commit()
+        except (InterfaceError, Error) as error:
+            print(error)
+        finally:
+            if self._connection:
+                self._connection.close()
+
+                return name_list
+            
+    async def delete_name(self, id_name):
+        query = """DELETE FROM public.enemies_user WHERE id = %s"""
+        
+        try:
+            with self._connect() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(query, (id_name, ))
+                conn.commit()
+        except (InterfaceError, Error) as error:
+            print(error)
+        finally:
+            if self._connection:
+                self._connection.close()
