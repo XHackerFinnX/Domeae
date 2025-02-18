@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const addButton = document.getElementById('addButton');
     const peopleList = document.getElementById('peopleList');
+    const userCount = document.getElementById('userCount');  // Элемент для отображения количества пользователей
     let people = [];  // Массив для хранения людей
 
     // Функция для получения людей с сервера
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await response.json();  // Преобразуем ответ в JSON
         people = data;  // Сохраняем полученные данные
         renderPeople(people);  // Отображаем людей на странице
+        updateUserCount();  // Обновляем количество пользователей
     }
 
     // Функция для рендеринга людей
@@ -76,6 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
             person[1].toLowerCase().startsWith(query)  // Ищем по имени (person[1])
         );
         renderPeople(filteredPeople);  // Рендерим отфильтрованный список
+        updateUserCount(filteredPeople.length);  // Обновляем количество пользователей
+    }
+
+    // Обновляем количество пользователей
+    function updateUserCount() {
+        userCount.textContent = `Количество пользователей: ${people.length}`;
     }
 
     // Обработчик нажатия на кнопку добавления

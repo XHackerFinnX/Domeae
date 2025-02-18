@@ -18,11 +18,31 @@ body {
     max-width: 400px;
 }
 
-.search-container {
+.header-container {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
 }
 
+.user-count {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    background-color: #f0f0f0;
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Контейнер для поиска */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Поле ввода */
 #searchInput {
     flex-grow: 1;
     padding: 10px;
@@ -31,6 +51,7 @@ body {
     border-radius: 4px 0 0 4px;
 }
 
+/* Кнопка добавления */
 #addButton {
     background-color: #4CAF50;
     color: white;
@@ -46,6 +67,7 @@ body {
     background-color: #45a049;
 }
 
+/* Список людей */
 #peopleList {
     list-style-type: none;
     padding: 0;
