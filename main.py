@@ -17,6 +17,7 @@ from api.v1.router_plan import router as router_plan
 from api.v1.router_filter import router as router_filter
 from api.v1.router_complet import router as router_complet
 from api.v1.router_launcher import router as router_launcher
+from api.v1.router_enemies import router as router_enemies
 
 from core.config import config
 
@@ -54,6 +55,7 @@ app.include_router(router_plan)
 app.include_router(router_filter)
 app.include_router(router_complet)
 app.include_router(router_launcher)
+app.include_router(router_enemies)
 
 class LoginData(BaseModel):
     username: int
