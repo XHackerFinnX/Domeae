@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Обновляем количество пользователей
     function updateUserCount() {
-        userCount.textContent = `Количество пользователей: ${people.length}`;
+        userCount.textContent = `Количество гондонов: ${people.length}`;
     }
 
     // Обработчик нажатия на кнопку добавления
