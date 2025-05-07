@@ -1,10 +1,10 @@
+import re
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
-from fastapi.responses import FileResponse
-
+from starlette.middleware.base import BaseHTTPMiddleware
 from pydantic import BaseModel
 
 from auth.check_auth import checking_user_entrance
@@ -21,9 +21,39 @@ from api.v1.router_enemies import router as router_enemies
 
 from core.config import config
 
-app = FastAPI(
-    title='Доска Задач'
-)
+# ---------------------- WAF Middleware ----------------------
+class SimpleWAFMiddleware(BaseHTTPMiddleware):
+    def __init__(self, app):
+        super().__init__(app)
+        self.blocked_patterns = [
+            re.compile(r"\.env", re.IGNORECASE),
+            re.compile(r"\.php", re.IGNORECASE),
+            re.compile(r"\.git", re.IGNORECASE),
+            re.compile(r"\.svn", re.IGNORECASE),
+            re.compile(r"\.bak", re.IGNORECASE),
+            re.compile(r"phpinfo", re.IGNORECASE),
+            re.compile(r"debug", re.IGNORECASE),
+            re.compile(r"config", re.IGNORECASE),
+            re.compile(r"db\.json", re.IGNORECASE),
+            re.compile(r"deployment-config", re.IGNORECASE),
+            re.compile(r"live_env", re.IGNORECASE),
+            re.compile(r"restore", re.IGNORECASE),
+            re.compile(r"robomongo", re.IGNORECASE),
+        ]
+
+    async def dispatch(self, request: Request, call_next):
+        path = str(request.url.path)
+        for pattern in self.blocked_patterns:
+            if pattern.search(path):
+                return Response("🚫 Запрос заблокирован WAF", status_code=403)
+        return await call_next(request)
+
+# ------------------------------------------------------------
+
+app = FastAPI(title='Доска Задач')
+
+# WAF должен быть добавлен самым первым
+app.add_middleware(SimpleWAFMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
@@ -46,6 +76,7 @@ app.add_middleware(
     max_age=2000000
 )
 
+# Подключение роутеров
 app.include_router(router_auth)
 app.include_router(router_main)
 app.include_router(router_home)
@@ -63,24 +94,15 @@ class LoginData(BaseModel):
 
 @app.post('/login')
 async def post_login(request: Request, data: LoginData):
-    
     print(data)
-    
-    dict_user = await checking_user_entrance(
-        data.username,
-        data.password
-    )
+    dict_user = await checking_user_entrance(data.username, data.password)
     print(dict_user)
     if dict_user:
         request.session.update(dict_user)
-        
         return JSONResponse(content={"message": "Успешная аутентификация"})
     else:
-         
         raise HTTPException(status_code=401, detail="Неверное имя пользователя или пароль")
 
- 
 @app.get("/favicon.ico")
 async def favicon():
-    return True
     return FileResponse("/static/pictures/favicon.ico")
