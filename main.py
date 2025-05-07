@@ -6,7 +6,6 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from pydantic import BaseModel
-
 from auth.check_auth import checking_user_entrance
 from api.v1.router_main import router as router_main
 from api.v1.router_auth import router as router_auth
